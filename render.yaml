@@ -1,0 +1,79 @@
+# =============================================================================
+#  RENDER BLUEPRINT — Foal & Pony Medusa backend
+# =============================================================================
+#  One-click deploy via Render's "Blueprint" feature:
+#    https://render.com/docs/blueprint-spec
+#
+#  This file describes ONE web service that runs Medusa (API + Admin UI).
+#  Postgres lives in Supabase (already provisioned). Redis is optional —
+#  Medusa runs without it for our scale, can be added later.
+#
+#  After Render finishes the deploy you'll get a URL like
+#    https://foalandpony-medusa.onrender.com
+#  Set that as ADMIN_ORIGIN in the Vercel storefront env vars, and the
+#  admin.foalandpony.com proxy will route to it.
+# =============================================================================
+
+services:
+  - type: web
+    name: foalandpony-medusa
+    runtime: node
+    plan: starter           # ₹600-700/mo. Bump to standard when traffic grows.
+    region: singapore       # closest Render region to India
+    rootDir: medusa
+    buildCommand: yarn install && yarn build
+    startCommand: yarn start
+    healthCheckPath: /health
+    autoDeploy: true
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # ----- Database (Supabase Postgres pooler) -------------------------------
+      # Format:
+      #   postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres
+      - key: DATABASE_URL
+        sync: false         # set in Render dashboard, never commit secrets
+
+      # ----- Medusa core secrets ----------------------------------------------
+      - key: JWT_SECRET
+        generateValue: true
+      - key: COOKIE_SECRET
+        generateValue: true
+
+      # ----- CORS — locks the API to the storefront + admin subdomain ---------
+      - key: STORE_CORS
+        value: https://foalandpony.com,https://www.foalandpony.com,http://localhost:3000
+      - key: ADMIN_CORS
+        value: https://admin.foalandpony.com,http://localhost:7001
+      - key: AUTH_CORS
+        value: https://foalandpony.com,https://www.foalandpony.com,https://admin.foalandpony.com
+
+      # ----- Public URL that the admin UI uses internally ---------------------
+      - key: MEDUSA_BACKEND_URL
+        value: https://admin.foalandpony.com
+      - key: MEDUSA_ADMIN_BACKEND_URL
+        value: https://admin.foalandpony.com
+
+      # ----- Supabase Storage for product images -------------------------------
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: products
+
+      # ----- Razorpay (only needed when checkout goes live) -------------------
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+
+      # ----- Email (Brevo) ----------------------------------------------------
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_EMAIL
+        value: hello@foalandpony.com

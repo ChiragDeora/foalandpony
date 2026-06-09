@@ -1,0 +1,18 @@
+# Backend lives elsewhere (Railway) — do not ship it through Vercel
+medusa/
+
+# Source material, never deploy
+instructions/
+DEPLOY.md
+*.docx
+*.pdf
+
+# Local dev cruft
+.env
+.env.local
+.env.production.local
+.next/
+node_modules/
+.DS_Store
+.vscode/
+.idea/
