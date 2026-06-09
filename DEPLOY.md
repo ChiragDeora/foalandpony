@@ -190,11 +190,20 @@ automatically uses the env var, so localhost works the same way as production.
 | Service | Tier | Approx. monthly |
 |---|---|---|
 | Vercel (Hobby) | Free | ₹0 |
-| Render (Starter web service, Singapore region) | Starter | ~₹600 |
-| Supabase (Pro for storage + DB) | Free → Pro | ₹0 – ₹2,000 |
-| Clerk (Free tier) | Free up to 10k MAU | ₹0 |
+| Render (Free web service, Singapore region) | Free | ₹0 |
+| Supabase | Free tier | ₹0 |
+| Clerk | Free up to 10k MAU | ₹0 |
 | Domain | foalandpony.com | ~₹85/mo amortised |
-| **Total at launch** | | **~₹700 – ₹2,800 / month** |
+| **Total at launch** | | **~₹85 / month** |
+
+### When to upgrade
+
+- **Render Starter ($7/mo)** — upgrade when cold-start latency hurts. Free tier
+  sleeps after 15 min of inactivity; the next request takes ~30s to wake the
+  server. For an admin panel hit a few times a week this is fine; for a
+  customer-facing checkout it isn't.
+- **Supabase Pro ($25/mo)** — when you exceed 500MB DB or 1GB storage.
+- **Vercel Pro ($20/mo)** — when team collaboration features matter.
 
 ---
 
@@ -222,5 +231,14 @@ automatically uses the env var, so localhost works the same way as production.
 - After changing env vars, redeploy. Rewrites are baked at build time.
 
 **Render service sleeps and is slow to wake up.**
-- Starter plan sleeps after 15 min of inactivity. Upgrade to Standard
-  (~₹2,000/mo) if cold-start latency becomes an issue.
+- Free plan sleeps after 15 minutes of inactivity. The next request takes
+  ~30 seconds to wake the server. Upgrade to Starter ($7/mo) if you need
+  always-on. The first storefront page-load after a cold start will fall
+  through to the empty state (the 5s timeout we set in `lib/config.ts`) and
+  recover on the next render — that's by design, so the site never hangs.
+
+**Render asks for payment info at deploy time.**
+- The `render.yaml` is pinned to the **free** plan, so no payment is needed.
+  If Render still prompts, click Cancel — the dialog appears whenever any
+  blueprint resource is paid; ours aren't. Double-check `plan: free` in
+  `render.yaml`.

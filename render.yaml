@@ -18,8 +18,13 @@ services:
   - type: web
     name: foalandpony-medusa
     runtime: node
-    plan: starter           # ₹600-700/mo. Bump to standard when traffic grows.
-    region: singapore       # closest Render region to India
+    plan: free              # $0/mo. Sleeps after 15 min idle, wakes on request
+                            # (~30s cold start). Upgrade to starter ($7/mo) when
+                            # traffic is steady or cold-start latency hurts.
+    region: oregon          # Render's free plan is Oregon/Ohio/Frankfurt only.
+                            # Latency from India is ~250ms; fine for an admin
+                            # panel. Move to "singapore" when you upgrade to a
+                            # paid plan for production traffic.
     rootDir: medusa
     buildCommand: yarn install && yarn build
     startCommand: yarn start
