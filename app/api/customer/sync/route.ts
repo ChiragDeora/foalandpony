@@ -26,7 +26,5 @@ export async function POST() {
     return NextResponse.json({ error: result.error }, { status: 500 })
   }
 
-  return NextResponse.json({
-    medusaCustomerId: result.medusaCustomerId,
-  })
+  return NextResponse.json({ ok: true })
 }
