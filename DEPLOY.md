@@ -1,187 +1,143 @@
 # Deploying Foal & Pony
 
-The stack splits across two hosts. Your company team only ever sees one URL.
+Single host, single deploy. Storefront and admin live on the same Vercel project.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  foalandpony.com           →  Vercel  →  Next.js storefront  │
-│  admin.foalandpony.com     →  Vercel proxy  →  Render Medusa │
-└──────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  foalandpony.com           →  Vercel  →  Next.js storefront      │
+│  admin.foalandpony.com     →  Vercel rewrite  →  /studio (Sanity)│
+│  cdn.sanity.io             →  Sanity-hosted product images       │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-- **Vercel** hosts the public storefront (this Next.js app).
-- **Render** runs the Medusa backend that the admin UI lives on.
-- **Vercel proxies** `admin.foalandpony.com` to Render via the `next.config.js`
-  rewrite, so the company team never sees the `*.onrender.com` URL.
-- **Supabase** is the Postgres database for Medusa **and** the bucket for
-  product images. Already provisioned.
-- **Clerk** is customer login on the storefront. Already provisioned.
+- **Vercel** hosts everything — public site + embedded Sanity Studio at `/studio`.
+- **Sanity** is the CMS the company team logs into to add products. It hosts
+  the product data and images on their CDN.
+- **Clerk** handles customer login on the storefront. Optional at launch.
+- **No backend server to run.** No Render, no Railway, no Postgres to babysit.
 
 ---
 
-## Step 1 — Push the repo to GitHub
+## Step 1 — Create the Sanity project (5 min)
+
+1. Go to https://www.sanity.io and sign up (Google login works).
+2. **Create new project** → name it "Foal & Pony" → pick the **production**
+   dataset → public visibility (read-only public, write-protected by auth).
+3. Open the project in https://www.sanity.io/manage. Copy two values from
+   the API tab:
+   - **Project ID** (looks like `a1b2c3d4`)
+   - **Dataset** (will be `production`)
+4. Under **API → CORS Origins**, add:
+   - `http://localhost:3000`
+   - `https://foalandpony.com`
+   - `https://admin.foalandpony.com`
+   - Tick **Allow credentials** for each.
+5. Under **Members**, invite each company team member by email. They get a
+   Sanity SSO login, no passwords to manage.
+
+---
+
+## Step 2 — Push the repo to GitHub
 
 ```bash
-git remote add origin git@github.com:<you>/foalandpony.git
-git push -u origin main
+git add .
+git commit -m "Switch to Sanity CMS"
+git push
 ```
 
-> Confirm `.env`, `.env.local`, `medusa/.env` are gitignored before pushing.
-> Quick check: `git ls-files | grep -E "^\.env"` should print nothing.
+> Confirm `.env`, `.env.local` are gitignored. Quick check:
+> `git ls-files | grep -E "^\.env"` should print only `.env.example`.
 
 ---
 
-## Step 2 — Deploy the storefront to Vercel
+## Step 3 — Deploy to Vercel
 
 You said the domain is already attached. So:
 
 1. Vercel dashboard → **New Project** → import the GitHub repo.
-2. Framework: **Next.js** (auto-detected from `vercel.json`).
-3. Root directory: **leave as `.`** (`.vercelignore` already excludes the
-   `medusa/` folder).
-4. Build command: `next build` (default).
-5. **Environment Variables** — paste in:
+2. Framework: **Next.js** (auto-detected).
+3. **Environment Variables** — paste:
 
    | Key | Value |
    |---|---|
-   | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | from Clerk dashboard |
-   | `CLERK_SECRET_KEY` | from Clerk dashboard |
-   | `NEXT_PUBLIC_SUPABASE_URL` | `https://afmmqcmfmwimkkykxrby.supabase.co` |
-   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | from Supabase API settings |
-   | `SUPABASE_SERVICE_ROLE_KEY` | from Supabase API settings (server-only) |
-   | `NEXT_PUBLIC_DEFAULT_REGION` | `in` |
-   | `MEDUSA_BACKEND_URL` | *(set after Step 3 — for now leave blank)* |
-   | `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` | *(set after Step 3)* |
+   | `NEXT_PUBLIC_SANITY_PROJECT_ID` | from Step 1.3 |
+   | `NEXT_PUBLIC_SANITY_DATASET` | `production` |
+   | `NEXT_PUBLIC_SANITY_API_VERSION` | `2024-10-01` |
    | `ADMIN_HOST` | `admin.foalandpony.com` |
-   | `ADMIN_ORIGIN` | *(set after Step 3 — the Render URL)* |
+   | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | from Clerk (optional) |
+   | `CLERK_SECRET_KEY` | from Clerk (optional) |
 
-6. Deploy.
+4. Deploy. The site goes live; `/shop` shows the "stocking up" empty state
+   until products are added.
 
-> The storefront builds and runs cleanly even with Medusa env vars blank.
-> The `/shop` page falls back to the "stocking up" empty state.
-
----
-
-## Step 3 — Deploy Medusa to Render
-
-1. Push the repo to GitHub if you haven't already (Step 1).
-2. Render dashboard → **New** → **Blueprint** → connect the repo.
-3. Render reads `render.yaml` and proposes a service called
-   `foalandpony-medusa`. Hit **Apply**.
-4. Fill in the secret env vars Render asks for:
-
-   - `DATABASE_URL` — from Supabase → Project Settings → Database →
-     Connection string → **Transaction pooler** (port 6543). Format:
-     ```
-     postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres
-     ```
-   - `SUPABASE_URL` — your project URL.
-   - `SUPABASE_SERVICE_ROLE_KEY` — Supabase → Project Settings → API.
-   - Skip Razorpay/Brevo for now if checkout/email isn't live yet.
-
-5. Render builds Medusa and gives you a public URL like
-   `https://foalandpony-medusa.onrender.com`. **Copy it.**
-
-6. Open a shell on Render (or run locally against the new DB) to seed the
-   schema and create the first admin user:
-
-   ```bash
-   cd medusa
-   npx medusa db:migrate
-   npx medusa user --email you@foalandpony.com --password <strong-password>
-   ```
-
-7. Visit `https://foalandpony-medusa.onrender.com/app`, log in, go to
-   **Settings → Publishable API Keys**, create a key, copy it.
+> Sanity vars all start with `NEXT_PUBLIC_` because the embedded Studio
+> needs them at build time on the client.
 
 ---
 
-## Step 4 — Wire the storefront to Medusa
+## Step 4 — Add the admin subdomain on Vercel
 
-Back in Vercel → Project → Settings → Environment Variables, fill in:
-
-| Key | Value |
-|---|---|
-| `MEDUSA_BACKEND_URL` | `https://admin.foalandpony.com` |
-| `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` | the key from Step 3.7 |
-| `ADMIN_ORIGIN` | `https://foalandpony-medusa.onrender.com` |
-
-> Note: `MEDUSA_BACKEND_URL` points at the **public proxy** subdomain, not
-> the Render URL directly. That keeps the storefront origin clean and the
-> Render URL never appears in any browser network tab.
-
-Redeploy the storefront (Deployments → ⋯ → Redeploy).
-
----
-
-## Step 5 — Add the admin subdomain on Vercel
-
-This is the trick that makes everything land on `admin.foalandpony.com`:
-
-1. Vercel → your storefront project → **Domains** → **Add**.
+1. Vercel → project → **Domains** → **Add**.
 2. Enter `admin.foalandpony.com`.
-3. Vercel asks for DNS records — add them to your domain registrar
-   (or if Vercel already manages the apex `foalandpony.com`, it auto-creates
-   the record).
-4. Wait for the green check (usually ~30 seconds).
+3. Vercel auto-creates the DNS record (since it manages the apex).
+4. Wait ~30 seconds for the green check.
 
-That's it. Vercel terminates SSL on `admin.foalandpony.com` and the
-`next.config.js` rewrite proxies all paths through to Render. The company
-team's browser shows `admin.foalandpony.com/app/...`, never the Render URL.
+That's it. The rewrite in `next.config.js` catches the `admin.foalandpony.com`
+host and serves the Sanity Studio at `/studio`. The company team's browser
+shows `admin.foalandpony.com` and nothing else.
 
 ---
 
-## Step 6 — Create the company team logins
+## Step 5 — Test it end-to-end
 
-In Render shell again, for each person on the company team:
+1. Visit `https://admin.foalandpony.com`. You should see the Sanity Studio
+   sign-in screen.
+2. Log in with the email you used for the Sanity project.
+3. Click **Catalogue → All products → Create new**.
+4. Fill in the LUNA model as a test:
+   - Name: LUNA
+   - Age band: Ages 4 to 7
+   - Size code: 45-15-130
+   - Add one colour with a hex like `#7BABE0` and an image.
+   - Tick **Published**.
+5. Hit **Publish**.
+6. Visit `https://foalandpony.com/shop`. LUNA appears on the grid within
+   ~60 seconds (Next.js revalidates).
 
-```bash
-cd medusa
-npx medusa user --email name@company.com --password <temporary>
-```
+---
+
+## Step 6 — Hand over to the company team
 
 Send them:
-- URL: `https://admin.foalandpony.com/app`
-- Their email + temporary password
-- The "how to add a product" doc (see below)
+- **URL**: `https://admin.foalandpony.com`
+- **How to log in**: with the email they got the Sanity invite on.
+- **What to do**: Click "Create new product" for each model. Fill in name,
+  age band, description, size code, colours (with hex + image per colour),
+  tick Published, hit Publish.
 
----
-
-## Step 7 — Hand over the product-add guide
-
-Create a Notion page or PDF for the company team with these screenshots and
-steps. Once the admin is live with their actual URL, I can draft this with
-real screenshots — for now the outline is:
-
-1. Log in at admin.foalandpony.com/app
-2. Click **Products → Create product**
-3. Fill in: title (e.g. "LUNA"), description, status = Published
-4. Add **variants** for each colour (one variant per colour, with its own
-   image, price, and stock)
-5. Upload images (drag-and-drop, multiple per product or per variant)
-6. Add to a **collection** — Ages 4–7, Ages 8–12, or Ages 13+
-7. Save. It's live on foalandpony.com/shop within seconds.
+When the admin is live with their real URL, I can write a one-pager with
+screenshots showing the exact flow.
 
 ---
 
 ## Local development
 
 ```bash
-# Storefront (this folder)
 npm install
-cp .env.example .env.local         # fill in Clerk + Supabase keys
-npm run dev                        # → http://localhost:3000
+cp .env.example .env.local       # fill in the Sanity IDs from Step 1
+npm run dev                      # → http://localhost:3000
 
-# Medusa (separate terminal)
-cd medusa
-yarn install
-cp .env.example .env               # fill in DATABASE_URL pointing at Supabase
-yarn dev                           # → http://localhost:9000
+# Studio is at:
+#   http://localhost:3000/studio
 ```
 
-Set `MEDUSA_BACKEND_URL=http://localhost:9000` and `ADMIN_ORIGIN=http://localhost:9000`
-in `.env.local` while you develop. The proxy rewrite in `next.config.js`
-automatically uses the env var, so localhost works the same way as production.
+To preview as the admin subdomain locally, add this to your `/etc/hosts`:
+
+```
+127.0.0.1 admin.foalandpony.local
+```
+
+Then visit `http://admin.foalandpony.local:3000` and set `ADMIN_HOST=admin.foalandpony.local` in `.env.local`.
 
 ---
 
@@ -190,55 +146,44 @@ automatically uses the env var, so localhost works the same way as production.
 | Service | Tier | Approx. monthly |
 |---|---|---|
 | Vercel (Hobby) | Free | ₹0 |
-| Render (Free web service, Singapore region) | Free | ₹0 |
-| Supabase | Free tier | ₹0 |
-| Clerk | Free up to 10k MAU | ₹0 |
+| Sanity (Free tier) | 3 users, 500k API requests, 5GB assets | ₹0 |
+| Clerk (Free tier) | up to 10k MAU | ₹0 |
 | Domain | foalandpony.com | ~₹85/mo amortised |
-| **Total at launch** | | **~₹85 / month** |
+| **Total** | | **~₹85 / month** |
+
+The free tiers comfortably fit a 19-product brand site for years.
 
 ### When to upgrade
 
-- **Render Starter ($7/mo)** — upgrade when cold-start latency hurts. Free tier
-  sleeps after 15 min of inactivity; the next request takes ~30s to wake the
-  server. For an admin panel hit a few times a week this is fine; for a
-  customer-facing checkout it isn't.
-- **Supabase Pro ($25/mo)** — when you exceed 500MB DB or 1GB storage.
-- **Vercel Pro ($20/mo)** — when team collaboration features matter.
+- **Sanity Growth** ($15/mo) — when you exceed 3 team members.
+- **Clerk Pro** ($25/mo) — when team SSO matters.
+- **Vercel Pro** ($20/mo) — for team collaboration / analytics.
 
 ---
 
-## What's not deployed yet (optional later)
+## Adding products in bulk (one-time seed)
 
-- **Razorpay checkout** — set `RAZORPAY_*` env vars in Render when ready.
-- **Brevo transactional email** — set `BREVO_*` env vars.
-- **Cloudflare R2 image CDN** — if Supabase Storage egress gets expensive,
-  swap to R2. Image domain whitelisted in `next.config.js`.
+If you want to drop in all 19 models from the Website Plan doc at once
+instead of typing them in by hand, ping me and I'll write a Sanity import
+script that reads the data and creates the documents via the Sanity API.
 
 ---
 
 ## Troubleshooting
 
-**The /shop page shows the empty state even after seeding products.**
-- Confirm `MEDUSA_BACKEND_URL` and `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` are
-  set in Vercel and the deployment has been re-triggered after the change.
-- Confirm products are **Published** (not draft) in the admin.
-- Open `https://admin.foalandpony.com/store/products` in a browser — if you
-  get a 401 or empty list, the publishable key is wrong.
+**`/shop` shows the empty state even after publishing a product.**
+- Confirm the product has **Published** ticked (not just saved as a draft).
+- Wait ~60s — Next.js revalidates the GROQ cache on that interval.
+- Confirm `NEXT_PUBLIC_SANITY_PROJECT_ID` is set in Vercel and the
+  deployment has been redeployed since the env var was added.
 
-**admin.foalandpony.com loads the storefront, not the admin.**
-- The `ADMIN_HOST` env var on Vercel must exactly match the subdomain you
-  added. Case-sensitive.
-- After changing env vars, redeploy. Rewrites are baked at build time.
+**admin.foalandpony.com loads the storefront, not the Studio.**
+- The `ADMIN_HOST` env var on Vercel must exactly match the subdomain (case-sensitive).
+- Rewrites are baked at build time — redeploy after changing env vars.
 
-**Render service sleeps and is slow to wake up.**
-- Free plan sleeps after 15 minutes of inactivity. The next request takes
-  ~30 seconds to wake the server. Upgrade to Starter ($7/mo) if you need
-  always-on. The first storefront page-load after a cold start will fall
-  through to the empty state (the 5s timeout we set in `lib/config.ts`) and
-  recover on the next render — that's by design, so the site never hangs.
+**Sanity Studio errors out with "missing CORS origin".**
+- Add the storefront and admin URLs in sanity.io/manage → API → CORS Origins.
 
-**Render asks for payment info at deploy time.**
-- The `render.yaml` is pinned to the **free** plan, so no payment is needed.
-  If Render still prompts, click Cancel — the dialog appears whenever any
-  blueprint resource is paid; ours aren't. Double-check `plan: free` in
-  `render.yaml`.
+**Image upload fails in Studio with "asset upload error".**
+- Sanity hosts images on their own CDN — no extra storage to set up. If it
+  fails, check your project's quota in sanity.io/manage (free tier is 5GB).

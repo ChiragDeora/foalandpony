@@ -1,13 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-// Origin where the Medusa admin + API live (on Render).
-// In dev this can be http://localhost:9000. In production it's your Render URL.
-const ADMIN_ORIGIN =
-  process.env.ADMIN_ORIGIN ||
-  process.env.MEDUSA_BACKEND_URL ||
-  'http://localhost:9000'
-
-// Host that the company will use in the browser, e.g. admin.foalandpony.com
+// Host the company team uses in the browser for the admin (Sanity Studio).
 const ADMIN_HOST = process.env.ADMIN_HOST || 'admin.foalandpony.com'
 
 const nextConfig = {
@@ -16,36 +9,34 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     unoptimized: false,
     remotePatterns: [
-      { protocol: 'http', hostname: 'localhost', port: '9000', pathname: '/**' },
+      { protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/**' },
       { protocol: 'https', hostname: '**.supabase.co', pathname: '/**' },
-      { protocol: 'https', hostname: '**.r2.dev', pathname: '/**' },
-      { protocol: 'https', hostname: '**.onrender.com', pathname: '/**' },
-      { protocol: 'https', hostname: '**.amazonaws.com', pathname: '/**' },
-      {
-        protocol: 'https',
-        hostname: 'medusa-public-images.s3.eu-west-1.amazonaws.com',
-        pathname: '/**',
-      },
+      { protocol: 'http', hostname: 'localhost', pathname: '/**' },
     ],
   },
 
   /**
-   * Admin subdomain proxy.
+   * Admin subdomain rewrite.
    *
-   * Requests hitting `admin.foalandpony.com/<anything>` are proxied to the
-   * Render-hosted Medusa origin. Vercel terminates SSL on the subdomain; the
-   * company's browser only ever sees admin.foalandpony.com. The Render URL
-   * stays hidden behind the proxy.
+   * Requests hitting `admin.foalandpony.com/<anything>` are rewritten to
+   * `/studio/<anything>` on the same Vercel project. Sanity Studio mounts at
+   * `/studio` and handles its own auth via Sanity SSO.
    *
-   * Set ADMIN_ORIGIN and ADMIN_HOST in Vercel env vars.
+   * After deploy: add admin.foalandpony.com as a domain on the Vercel project.
+   * No second host, no proxy origin, no extra DNS for the backend.
    */
   async rewrites() {
     return {
       beforeFiles: [
         {
+          source: '/',
+          has: [{ type: 'host', value: ADMIN_HOST }],
+          destination: '/studio',
+        },
+        {
           source: '/:path*',
           has: [{ type: 'host', value: ADMIN_HOST }],
-          destination: `${ADMIN_ORIGIN}/:path*`,
+          destination: '/studio/:path*',
         },
       ],
       afterFiles: [],

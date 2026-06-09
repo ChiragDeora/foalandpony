@@ -1,11 +1,10 @@
 import Link from 'next/link'
-import { COLLECTION_HANDLES } from '@/lib/constants'
 
-const filters = [
-  { label: 'All frames', handle: '' },
-  { label: 'Ages 4–7', handle: COLLECTION_HANDLES.adventure },
-  { label: 'Ages 8–12', handle: COLLECTION_HANDLES.explorer },
-  { label: 'Ages 13+', handle: COLLECTION_HANDLES.champion },
+const filters: { label: string; age?: string }[] = [
+  { label: 'All frames' },
+  { label: 'Ages 4–7', age: '4-7' },
+  { label: 'Ages 8–12', age: '8-12' },
+  { label: 'Ages 13+', age: '13+' },
 ]
 
 export function CollectionFilters({ active }: { active?: string }) {
@@ -13,9 +12,9 @@ export function CollectionFilters({ active }: { active?: string }) {
     <div className="collection-filters">
       {filters.map((f) => (
         <Link
-          key={f.handle || 'all'}
-          href={f.handle ? `/shop?collection=${f.handle}` : '/shop'}
-          className={`collection-filter${active === f.handle ? ' active' : ''}`}
+          key={f.age || 'all'}
+          href={f.age ? `/shop?age=${encodeURIComponent(f.age)}` : '/shop'}
+          className={`collection-filter${active === f.age || (!active && !f.age) ? ' active' : ''}`}
         >
           {f.label}
         </Link>

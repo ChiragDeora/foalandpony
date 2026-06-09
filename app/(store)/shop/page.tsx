@@ -1,31 +1,32 @@
-import { listProducts } from '@/lib/data/products'
-import { getCollectionByHandle } from '@/lib/data/collections'
 import { ProductGrid } from '@/components/shop/ProductGrid'
 import { CollectionFilters } from '@/components/shop/CollectionFilters'
-import { BackendStatusBanner } from '@/components/shop/BackendStatusBanner'
+import { listAllProducts, listProductsByAge } from '@/lib/sanity/products'
+import type { AgeBand } from '@/lib/sanity/types'
 
 type Props = {
-  searchParams: Promise<{ collection?: string }>
+  searchParams: Promise<{ age?: string }>
+}
+
+function asAgeBand(value: string | undefined): AgeBand | undefined {
+  if (value === '4-7' || value === '8-12' || value === '13+') return value
+  return undefined
 }
 
 export default async function ShopPage({ searchParams }: Props) {
   const params = await searchParams
-  const collectionHandle = params.collection
+  const age = asAgeBand(params.age)
 
-  let collectionId: string | undefined
-  if (collectionHandle) {
-    const col = await getCollectionByHandle(collectionHandle)
-    collectionId = col?.id
-  }
-
-  const { products, connected } = await listProducts({ collectionId, limit: 48 })
+  const products = age ? await listProductsByAge(age) : await listAllProducts()
 
   return (
     <div className="shop-page">
       <div className="shop-page-header">
         <div>
           <span className="shop-page-kicker">The collection.</span>
-          <h1>Frames they&apos;ll <em style={{ fontStyle: 'italic', color: 'var(--orange)' }}>actually</em> wear.</h1>
+          <h1>
+            Frames they&apos;ll{' '}
+            <em style={{ fontStyle: 'italic', color: 'var(--orange)' }}>actually</em> wear.
+          </h1>
         </div>
         <p>
           Nineteen models, a hundred-plus colours, three age bands. Every frame
@@ -33,8 +34,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </p>
       </div>
 
-      <BackendStatusBanner connected={connected} />
-      <CollectionFilters active={collectionHandle} />
+      <CollectionFilters active={age} />
       <ProductGrid products={products} />
     </div>
   )

@@ -1,8 +1,8 @@
-import type { HttpTypes } from '@medusajs/types'
 import Link from 'next/link'
+import type { FoalProduct } from '@/lib/sanity/types'
 import { ProductCard } from './ProductCard'
 
-export function ProductGrid({ products }: { products: HttpTypes.StoreProduct[] }) {
+export function ProductGrid({ products }: { products: FoalProduct[] }) {
   if (!products.length) {
     return (
       <div className="shop-empty-card">
@@ -32,7 +32,7 @@ export function ProductGrid({ products }: { products: HttpTypes.StoreProduct[] }
   return (
     <div className="product-grid">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard key={product._id} product={product} />
       ))}
     </div>
   )
