@@ -130,14 +130,11 @@ export default function FitPage() {
           </Link>
           <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
             <li><Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link></li>
-            <li><Link href="/#why" onClick={() => setMenuOpen(false)}>Why us</Link></li>
-            <li><Link href="/#ages" onClick={() => setMenuOpen(false)}>Collections</Link></li>
+            <li><Link href="/collections" onClick={() => setMenuOpen(false)}>Collections</Link></li>
             <li><Link href="/fit" onClick={() => setMenuOpen(false)}>Find your fit</Link></li>
-            <li><Link href="/#schools" onClick={() => setMenuOpen(false)}>For schools</Link></li>
           </ul>
           <div className="nav-actions">
             <Link href="/cart" className="nav-cart" onClick={() => setMenuOpen(false)}>Cart</Link>
-            <Link href="/shop" className="nav-shop">Shop now</Link>
             <button
               className="nav-burger"
               onClick={() => setMenuOpen(v => !v)}

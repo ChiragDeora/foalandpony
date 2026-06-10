@@ -153,42 +153,6 @@ const features = [
   { num: '04', title: 'Fits little faces', body: 'Built from the ground up for child proportions. Soft-grip nose pads stay put through every cartwheel, scoot and slide.' },
 ]
 
-const ageGroups = [
-  {
-    key: 'foals',
-    href: '/shop?age=4-7',
-    range: 'Ages 4 to 7',
-    blurb: 'First-glasses friendly. Special nose pads grip without pinching, even at nap time.',
-    models: ['LUNA', 'SCOUT', 'RIVER', 'JUMPER', 'PIPPIN', 'DAISY', 'FERN'],
-    bg: '#FCE9D2',
-    accent: '#B96E00',
-    swatches: ['#E89B5C', '#F7C56B', '#D2766E', '#7BABE0'],
-    photo: '/assets/photos/portrait-tiny.png',
-  },
-  {
-    key: 'trotters',
-    href: '/shop?age=8-12',
-    range: 'Ages 8 to 12',
-    blurb: 'Our widest spread. Soft flex, medium flex, and polarised clip-on options for outdoor days.',
-    models: ['FABLE', 'OLIVER', 'HARPER', 'PIXIE', 'CLOVER', 'BECKETT', 'SAWYER', 'SKIPPER', 'ARCHER', 'STAR', 'WILLOW'],
-    bg: '#DCEEFB',
-    accent: '#2E83BD',
-    swatches: ['#2E83BD', '#1F3A5C', '#6DBE7A', '#E89B5C'],
-    photo: '/assets/photos/portrait-mid.png',
-  },
-  {
-    key: 'ponies',
-    href: '/shop?age=13',
-    range: 'Ages 13 and up',
-    blurb: 'Bigger frames closer to adult sizing, without losing the playful colour range.',
-    models: ['ARCHER', 'STAR', 'ELLE', 'WILLOW'],
-    bg: '#E7E0F4',
-    accent: '#7245A0',
-    swatches: ['#1F3A5C', '#7245A0', '#D2766E', '#3F8B4D'],
-    photo: '/assets/photos/portrait-teen.png',
-  },
-]
-
 const tests = [
   { ic: 'drop', title: 'The drop test', body: 'Two metres of concrete. Fifty drops in a row. No splinters.' },
   { ic: 'refresh', title: 'The bend test', body: '10,000 hinge cycles to 180°. Snaps right back, every time.' },
@@ -268,16 +232,13 @@ export default function Home() {
           </Link>
           <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
             <li><Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link></li>
-            <li><a href="#why" onClick={() => setMenuOpen(false)}>Why us</a ></li>
-            <li><a href="#ages" onClick={() => setMenuOpen(false)}>Collections</a></li>
+            <li><Link href="/collections" onClick={() => setMenuOpen(false)}>Collections</Link></li>
             <li><Link href="/fit" onClick={() => setMenuOpen(false)}>Find your fit</Link></li>
-            <li><a href="#schools" onClick={() => setMenuOpen(false)}>For schools</a></li>
           </ul>
           <div className="nav-actions">
             <Link href="/cart" className="nav-cart" aria-label="Cart">
               <Icon name="cart" size={20} /> Cart
             </Link>
-            <Link href="/shop" className="nav-shop">Shop now</Link>
             <button
               className="nav-burger"
               onClick={() => setMenuOpen(v => !v)}
@@ -295,16 +256,12 @@ export default function Home() {
         <div className="hero-orb-2" aria-hidden />
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="hero-tag">
-              <span className="hero-tag-dot">★</span>
-              Optometrist-designed eyewear
-            </span>
             <h1>
               Glasses that <span className="squiggle">survive</span> being a kid.
             </h1>
             <p className="lede">
               Premium children&apos;s eyewear from Stallion. Built to bend through playgrounds,
-              soccer goals and the occasional faceplant. Beautiful enough they actually want
+              soccer goals and the occasional faceplant. Comfortable enough they actually want
               to wear them.
             </p>
             <div className="hero-ctas">
@@ -320,13 +277,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero-visual">
+          <div className="hero-visual hero-visual-cutout">
             <Image
-              src="/assets/photos/kid-jumping.jpeg"
+              src="/assets/photos/kid-jumping-cutout.png"
               alt="Kid mid-jump wearing Foal & Pony glasses"
               fill
               priority
-              className="hero-photo"
+              className="hero-photo hero-photo-cutout"
               sizes="(max-width: 1100px) 90vw, 540px"
             />
             <Image
@@ -334,23 +291,17 @@ export default function Home() {
               alt=""
               width={240}
               height={240}
-              className="hero-mascot-float"
+              className="hero-mascot-float hero-mascot-foal"
               priority
             />
-            <div className="badge-float badge-tr">
-              <span className="b-icon"><Icon name="hinge" size={18} /></span>
-              <span>
-                Bends, never snaps
-                <span className="b-sub">Memory-flex hinges</span>
-              </span>
-            </div>
-            <div className="badge-float badge-br">
-              <span className="b-icon"><Icon name="badge" size={18} /></span>
-              <span>
-                Drop-tested
-                <span className="b-sub">2 m onto concrete</span>
-              </span>
-            </div>
+            <Image
+              src="/assets/pony.png"
+              alt=""
+              width={260}
+              height={260}
+              className="hero-mascot-float hero-mascot-pony"
+              priority
+            />
           </div>
         </div>
       </header>
@@ -400,8 +351,8 @@ export default function Home() {
               </h2>
             </div>
             <p>
-              We obsessed over every gram, hinge and colour so you get one thing: frames
-              that keep up, and stay on, all day long.
+              We obsessed over every gram, hinge, colour and comfort so you get one thing:
+              frames that keep up, and stay on, all day long.
             </p>
           </div>
           <div className="features-grid">
@@ -411,56 +362,6 @@ export default function Home() {
                 <h3>{f.title}</h3>
                 <p>{f.body}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============ SHOP BY AGE ============ */}
-      <section className="section" id="ages" style={{ background: 'var(--paper)' }}>
-        <div className="container">
-          <div className="s-head">
-            <div>
-              <span className="eyebrow">Sized for them, not you.</span>
-              <h2>
-                Frames they&apos;ll love,<br />
-                <em>sized for who they are.</em>
-              </h2>
-            </div>
-            <p>
-              Every frame is proportioned for a specific age range. Pick the right group
-              and the fit takes care of itself.
-            </p>
-          </div>
-          <div className="ages-grid">
-            {ageGroups.map(g => (
-              <Link key={g.key} href={g.href} className="age-card">
-                <div className="age-img age-img-photo" style={{ ['--age-bg' as string]: g.bg }}>
-                  <Image
-                    src={g.photo}
-                    alt={`Child wearing Foal & Pony frames, ${g.range.toLowerCase()}`}
-                    fill
-                    sizes="(max-width: 1100px) 90vw, 380px"
-                    className="age-photo"
-                  />
-                  <div className="age-swatches">
-                    {g.swatches.map((c, j) => (
-                      <span key={j} className="age-swatch" style={{ background: c }} />
-                    ))}
-                  </div>
-                </div>
-                <div className="age-body">
-                  <h3>{g.range}</h3>
-                  <p>{g.blurb}</p>
-                  <div className="age-models">
-                    {g.models.slice(0, 6).map(m => <span key={m} className="age-model">{m}</span>)}
-                    {g.models.length > 6 && <span className="age-model">+{g.models.length - 6}</span>}
-                  </div>
-                  <span className="age-cta">
-                    Browse the collection <Icon name="arrow" size={16} />
-                  </span>
-                </div>
-              </Link>
             ))}
           </div>
         </div>

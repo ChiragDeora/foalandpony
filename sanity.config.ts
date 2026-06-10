@@ -3,8 +3,10 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
+import { DocumentsIcon } from '@sanity/icons'
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schemaTypes } from './sanity/schemas'
+import { BulkImportTool } from './sanity/tools/BulkImportTool'
 
 export default defineConfig({
   basePath: '/studio',
@@ -66,5 +68,14 @@ export default defineConfig({
           ]),
     }),
     visionTool({ defaultApiVersion: apiVersion }),
+  ],
+  tools: (prev) => [
+    ...prev,
+    {
+      name: 'bulk-import',
+      title: 'Bulk import',
+      icon: DocumentsIcon,
+      component: BulkImportTool,
+    },
   ],
 })

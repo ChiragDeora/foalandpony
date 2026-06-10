@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { ClerkProvider } from '@clerk/nextjs'
+import { clerkAppearance } from '@/lib/clerk-appearance'
 import './globals.css'
 import './store.css'
 
@@ -28,7 +29,7 @@ export default function RootLayout({
   }
 
   return (
-    <ClerkProvider publishableKey={publishableKey}>
+    <ClerkProvider publishableKey={publishableKey} appearance={clerkAppearance}>
       <html lang="en">{body}</html>
     </ClerkProvider>
   )

@@ -275,6 +275,7 @@ img { display: block; max-width: 100%; }
   color: var(--orange);
   font-style: italic;
   font-weight: 700;
+  margin-right: 0.22em;
 }
 .hero h1 .squiggle::after {
   content: '';
@@ -325,27 +326,56 @@ img { display: block; max-width: 100%; }
   object-fit: cover;
   object-position: center 22%;
 }
+/* Cutout hero — no card, photo blends straight onto the page */
+.hero-visual-cutout {
+  width: 100%;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.hero-photo-cutout {
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 20px 30px rgba(31,58,92,.14));
+}
+/* Foal + pony play at her feet, both bouncing along with her */
 .hero-mascot-float {
   position: absolute;
-  left: 24px;
-  bottom: 24px;
-  width: 170px;
   height: auto;
   z-index: 6;
-  animation: bobble 4.5s ease-in-out infinite;
-  filter: drop-shadow(0 18px 26px rgba(31,58,92,.32));
+  animation: pony-bounce 1.5s cubic-bezier(.5, .05, .5, .95) infinite;
+  filter: drop-shadow(0 14px 20px rgba(31,58,92,.28));
   transform-origin: bottom center;
   pointer-events: none;
 }
-@keyframes bobble {
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-8px) rotate(-2deg); }
+.hero-mascot-foal {
+  left: 2%;
+  bottom: 6px;
+  width: 138px;
+  z-index: 5;
+}
+.hero-mascot-pony {
+  right: 2%;
+  bottom: -2px;
+  width: 150px;
+  z-index: 7;
+  animation-duration: 1.7s;
+  animation-delay: .35s;
+}
+@keyframes pony-bounce {
+  0%, 100% { transform: translateY(0) rotate(-5deg) scaleY(1); }
+  10% { transform: translateY(0) rotate(-5deg) scaleY(.92); }
+  45% { transform: translateY(-24px) rotate(-2deg) scaleY(1.04); }
+  80% { transform: translateY(0) rotate(-5deg) scaleY(.96); }
 }
 @media (max-width: 1100px) {
-  .hero-mascot-float { width: 140px; left: 18px; bottom: 18px; }
+  .hero-mascot-foal { width: 118px; left: 1%; bottom: 4px; }
+  .hero-mascot-pony { width: 128px; left: auto; right: 1%; bottom: -2px; }
 }
 @media (max-width: 720px) {
-  .hero-mascot-float { width: 110px; left: 14px; bottom: 14px; }
+  .hero-mascot-foal { width: 94px; left: 0; bottom: 2px; }
+  .hero-mascot-pony { width: 104px; left: auto; right: 0; bottom: 0; }
 }
 .badge-float {
   position: absolute;
@@ -1701,6 +1731,122 @@ img { display: block; max-width: 100%; }
 }
 .account-header a { color: var(--navy); text-decoration: none; font-weight: 700; }
 .account-links a { color: var(--orange); font-weight: 700; margin-right: 16px; }
+
+/* ---- Custom-branded auth (sign in / sign up) ---- */
+.auth-page {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(680px 480px at 12% 10%, rgba(243, 156, 18, 0.14), transparent 60%),
+    radial-gradient(620px 520px at 92% 88%, rgba(93, 173, 226, 0.16), transparent 60%),
+    var(--cream);
+}
+.auth-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 940px;
+  display: grid;
+  grid-template-columns: 0.92fr 1fr;
+  gap: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px -42px rgba(31, 58, 92, 0.34);
+}
+.auth-aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 44px 40px 0;
+  background: linear-gradient(160deg, #FFF3E0 0%, #FCE9D2 55%, #F8DCEF 120%);
+  overflow: hidden;
+}
+.auth-aside-pony {
+  background: linear-gradient(160deg, #E7F0FB 0%, #DCEEFB 55%, #E7E0F4 120%);
+}
+.auth-logo { display: inline-flex; margin-bottom: 36px; }
+.auth-eyebrow {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+.auth-aside-pony .auth-eyebrow { color: var(--sky-deeper); }
+.auth-aside-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(30px, 3vw, 40px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  margin-bottom: 14px;
+}
+.auth-aside-title em { color: var(--orange); font-style: italic; }
+.auth-aside-pony .auth-aside-title em { color: var(--sky-deeper); }
+.auth-aside-copy {
+  font-size: 15px;
+  color: var(--ink-2);
+  max-width: 320px;
+  line-height: 1.55;
+}
+.auth-aside-mascot {
+  margin-top: auto;
+  align-self: center;
+  width: 200px;
+  height: auto;
+  filter: drop-shadow(0 18px 26px rgba(31, 58, 92, 0.26));
+  animation: pony-bounce 1.8s cubic-bezier(.5, .05, .5, .95) infinite;
+  transform-origin: bottom center;
+}
+.auth-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+/* Let the Clerk card sit flush inside our panel */
+.auth-form .cl-rootBox,
+.auth-form .cl-card {
+  width: 100%;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+.auth-disabled {
+  text-align: center;
+  max-width: 300px;
+}
+.auth-disabled h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.auth-disabled p {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+  line-height: 1.55;
+}
+.auth-disabled code {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 13px;
+}
+@media (max-width: 860px) {
+  .auth-shell { grid-template-columns: 1fr; max-width: 460px; }
+  .auth-aside { padding: 32px 32px 0; }
+  .auth-aside-copy { max-width: none; }
+  .auth-aside-mascot { width: 130px; margin-top: 18px; }
+}
 
 /* ============================================ */
 /* ============ INTERACTIVE SIZE CHART ======== */

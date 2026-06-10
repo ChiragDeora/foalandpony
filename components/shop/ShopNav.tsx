@@ -5,12 +5,9 @@ import { useState } from 'react'
 
 const navLinks = [
   { href: '/shop', label: 'Shop' },
-  { href: '/#why', label: 'Why us' },
-  { href: '/#ages', label: 'Collections' },
+  { href: '/collections', label: 'Collections' },
   { href: '/fit', label: 'Find your fit' },
-  { href: '/#schools', label: 'For schools' },
   { href: '/cart', label: 'Cart' },
-  { href: '/account', label: 'Account' },
 ]
 
 export function ShopNav({ cartCount }: { cartCount: number }) {
