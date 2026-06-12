@@ -59,6 +59,19 @@ const AGE_BANDS = ['4-7', '8-12', '13+']
 const SHAPES = ['round', 'oval', 'square', 'rectangle', 'panto', 'wayfarer']
 const TECHS = ['nose-pad', 'soft-flex', 'medium-flex', 'polarised-clip-on']
 
+// Studio shows friendly labels (e.g. "Soft flex") but stores hyphenated values
+// (e.g. "soft-flex"). Accept either, plus loose variants like "Special nose pad".
+const TECH_ALIASES: Record<string, string> = {
+  'special nose pad': 'nose-pad',
+  'nose pad': 'nose-pad',
+  'soft flex': 'soft-flex',
+  'medium flex': 'medium-flex',
+  'polarised clip-on': 'polarised-clip-on',
+  'polarised clip on': 'polarised-clip-on',
+  'polarized clip-on': 'polarised-clip-on',
+  'polarized clip on': 'polarised-clip-on',
+}
+
 type RowResult = {
   row: number
   name: string
@@ -82,6 +95,18 @@ function slugify(input: string) {
 function truthy(value: unknown) {
   const s = String(value ?? '').trim().toLowerCase()
   return s === 'true' || s === '1' || s === 'yes' || s === 'y'
+}
+
+/** Map a "technology" cell (label or value, any case/spacing) to its schema value. */
+function normaliseTech(value: unknown): string {
+  const raw = String(value ?? '').trim()
+  if (!raw) return ''
+  const lower = raw.toLowerCase()
+  if (TECHS.includes(lower)) return lower
+  if (TECH_ALIASES[lower]) return TECH_ALIASES[lower]
+  const hyphenated = lower.replace(/\s+/g, '-')
+  if (TECHS.includes(hyphenated)) return hyphenated
+  return lower
 }
 
 /** Normalise an age band cell into one of the schema values. */
@@ -222,9 +247,10 @@ export function BulkImportTool() {
             return
           }
 
-          const tech = String(r['technology'] ?? '').trim().toLowerCase()
+          const techRaw = String(r['technology'] ?? '').trim()
+          const tech = normaliseTech(techRaw)
           if (tech && !TECHS.includes(tech)) {
-            out.push({ row: rowNo, name, status: 'error', message: `Invalid technology "${tech}"` })
+            out.push({ row: rowNo, name, status: 'error', message: `Invalid technology "${techRaw}"` })
             return
           }
 
