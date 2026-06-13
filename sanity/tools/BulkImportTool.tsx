@@ -30,6 +30,7 @@ async function loadXLSX() {
 const TEMPLATE_HEADERS = [
   'name',
   'tagline',
+  'price',
   'description',
   'ageBand',
   'shape',
@@ -44,6 +45,7 @@ const TEMPLATE_HEADERS = [
 const TEMPLATE_EXAMPLE = [
   'LUNA',
   'Featherlight everyday round',
+  '1499',
   'Built for first-glasses kids. Bends through playground tumbles and stays put through every cartwheel.',
   '4-7',
   'round',
@@ -254,6 +256,12 @@ export function BulkImportTool() {
             return
           }
 
+          const price = Number(r['price'])
+          if (!Number.isFinite(price) || price <= 0) {
+            out.push({ row: rowNo, name, status: 'error', message: 'Missing or invalid "price"' })
+            return
+          }
+
           const { ok: colours, errors: colourErrors } = parseColours(r['colours'])
           if (colourErrors.length) {
             out.push({ row: rowNo, name, status: 'error', message: colourErrors.join('; ') })
@@ -268,6 +276,7 @@ export function BulkImportTool() {
             name,
             slug: { _type: 'slug', current: slugify(name) },
             ageBand,
+            price,
             published: truthy(r['published']),
             featured: truthy(r['featured']),
             order: Number.isFinite(order) && String(orderRaw).trim() !== '' ? order : 100,
@@ -424,9 +433,9 @@ export function BulkImportTool() {
             </Text>
             <Text size={1} muted>
               <strong>name</strong> (required) · <strong>ageBand</strong> (required: 4-7, 8-12, 13+)
-              · tagline · description (plain text) · shape ({SHAPES.join(', ')}) · sizeCode (e.g.
-              45-16-130) · technology ({TECHS.join(', ')}) · published / featured (true/false) ·
-              order (number).
+              · <strong>price</strong> (required, whole rupees) · tagline · description (plain
+              text) · shape ({SHAPES.join(', ')}) · sizeCode (e.g. 45-16-130) · technology (
+              {TECHS.join(', ')}) · published / featured (true/false) · order (number).
             </Text>
             <Text size={1} muted>
               colours — semicolon-separated <code>Name:#hex</code> pairs, e.g.

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { useCart } from '@/lib/cart/cart-context'
 
 const navLinks = [
   { href: '/shop', label: 'Shop' },
@@ -10,8 +11,9 @@ const navLinks = [
   { href: '/cart', label: 'Cart' },
 ]
 
-export function ShopNav({ cartCount }: { cartCount: number }) {
+export function ShopNav() {
   const [open, setOpen] = useState(false)
+  const { itemCount } = useCart()
 
   return (
     <>
@@ -33,8 +35,8 @@ export function ShopNav({ cartCount }: { cartCount: number }) {
             onClick={() => setOpen(false)}
           >
             {link.label}
-            {link.href === '/cart' && cartCount > 0 && (
-              <span className="shop-cart-badge">{cartCount}</span>
+            {link.href === '/cart' && itemCount > 0 && (
+              <span className="shop-cart-badge">{itemCount}</span>
             )}
           </Link>
         ))}

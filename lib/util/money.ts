@@ -11,12 +11,3 @@ export function formatInr(amount: number, currencyCode = 'inr') {
     maximumFractionDigits: 0,
   }).format(amount)
 }
-
-/** Medusa amounts are often in major units; adjust if your API returns minor units. */
-export function formatVariantPrice(
-  amount: number | undefined | null,
-  currencyCode = 'inr'
-) {
-  if (amount == null) return '—'
-  return formatInr(amount, currencyCode)
-}

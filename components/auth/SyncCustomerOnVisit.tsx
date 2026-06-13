@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-/** Calls server sync once per session so Supabase + Medusa stay linked to Clerk. */
+/** Calls server sync once per session so the Supabase profile stays linked to Clerk. */
 export function SyncCustomerOnVisit() {
   const synced = useRef(false)
 

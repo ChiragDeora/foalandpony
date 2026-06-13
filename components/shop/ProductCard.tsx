@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/lib/sanity/client'
 import type { FoalProduct } from '@/lib/sanity/types'
+import { formatInr } from '@/lib/util/money'
 
 function primaryImage(product: FoalProduct) {
   const first = product.colours?.find((c) => c.image)?.image
@@ -10,12 +11,6 @@ function primaryImage(product: FoalProduct) {
     return urlFor(product.lifestyleImages[0]).width(640).height(640).fit('crop').url()
   }
   return null
-}
-
-const AGE_LABEL: Record<FoalProduct['ageBand'], string> = {
-  '4-7': 'Ages 4 – 7',
-  '8-12': 'Ages 8 – 12',
-  '13+': 'Ages 13+',
 }
 
 export function ProductCard({ product }: { product: FoalProduct }) {
@@ -51,9 +46,9 @@ export function ProductCard({ product }: { product: FoalProduct }) {
           )}
         </div>
         <div className="product-card-body">
-          <span className="product-card-meta">{AGE_LABEL[product.ageBand]}</span>
           <h3>{product.name}</h3>
           {product.tagline && <p className="product-card-tagline">{product.tagline}</p>}
+          <p className="product-card-price">{formatInr(product.price)}</p>
         </div>
       </Link>
     </article>

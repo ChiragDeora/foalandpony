@@ -1,11 +1,12 @@
 import { sanityClient, isSanityConfigured } from './client'
 import {
   ALL_PUBLISHED_PRODUCTS_QUERY,
-  PRODUCTS_BY_AGE_QUERY,
+  PRODUCTS_BY_SHAPE_QUERY,
   PRODUCT_BY_SLUG_QUERY,
   FEATURED_PRODUCTS_QUERY,
 } from './queries'
-import type { AgeBand, FoalProduct } from './types'
+import type { FoalProduct } from './types'
+import type { ProductShape } from './shapes'
 
 /**
  * Server-side product fetchers.
@@ -26,12 +27,12 @@ export async function listAllProducts(): Promise<FoalProduct[]> {
   }
 }
 
-export async function listProductsByAge(age: AgeBand): Promise<FoalProduct[]> {
+export async function listProductsByShape(shape: ProductShape): Promise<FoalProduct[]> {
   if (!isSanityConfigured) return []
   try {
     return await sanityClient.fetch<FoalProduct[]>(
-      PRODUCTS_BY_AGE_QUERY,
-      { age },
+      PRODUCTS_BY_SHAPE_QUERY,
+      { shape },
       { next: { tags: ['products'], revalidate: 60 } }
     )
   } catch {

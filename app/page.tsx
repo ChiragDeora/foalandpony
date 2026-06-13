@@ -586,7 +586,7 @@ export default function Home() {
                 >
                   <Icon name="instagram" size={18} />
                 </a>
-                <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                <a href="https://wa.me/919324337504" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                   <Icon name="whatsapp" size={18} />
                 </a>
                 <a href="mailto:hello@foalandpony.com" aria-label="Email">
@@ -598,9 +598,9 @@ export default function Home() {
               <h4>Shop</h4>
               <ul>
                 <li><Link href="/shop">All frames</Link></li>
-                <li><Link href="/shop?age=4-7">Ages 4–7</Link></li>
-                <li><Link href="/shop?age=8-12">Ages 8–12</Link></li>
-                <li><Link href="/shop?age=13">Ages 13+</Link></li>
+                <li><Link href="/shop?shape=round">Round</Link></li>
+                <li><Link href="/shop?shape=square">Square</Link></li>
+                <li><Link href="/shop?shape=oval">Oval</Link></li>
               </ul>
             </div>
             <div className="footer-col">

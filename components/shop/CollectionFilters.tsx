@@ -1,10 +1,9 @@
 import Link from 'next/link'
+import { PRODUCT_SHAPES, SHAPE_LABELS, type ProductShape } from '@/lib/sanity/shapes'
 
-const filters: { label: string; age?: string }[] = [
+const filters: { label: string; shape?: ProductShape }[] = [
   { label: 'All frames' },
-  { label: 'Ages 4–7', age: '4-7' },
-  { label: 'Ages 8–12', age: '8-12' },
-  { label: 'Ages 13+', age: '13+' },
+  ...PRODUCT_SHAPES.map((shape) => ({ label: SHAPE_LABELS[shape], shape })),
 ]
 
 export function CollectionFilters({ active }: { active?: string }) {
@@ -12,9 +11,9 @@ export function CollectionFilters({ active }: { active?: string }) {
     <div className="collection-filters">
       {filters.map((f) => (
         <Link
-          key={f.age || 'all'}
-          href={f.age ? `/shop?age=${encodeURIComponent(f.age)}` : '/shop'}
-          className={`collection-filter${active === f.age || (!active && !f.age) ? ' active' : ''}`}
+          key={f.shape || 'all'}
+          href={f.shape ? `/shop?shape=${encodeURIComponent(f.shape)}` : '/shop'}
+          className={`collection-filter${active === f.shape || (!active && !f.shape) ? ' active' : ''}`}
         >
           {f.label}
         </Link>

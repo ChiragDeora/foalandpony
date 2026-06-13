@@ -36,6 +36,14 @@ export const productSchema = defineType({
       group: 'basics',
     }),
     defineField({
+      name: 'price',
+      title: 'Price (₹)',
+      description: 'Price in Indian rupees (whole rupees, no paise).',
+      type: 'number',
+      group: 'basics',
+      validation: (r) => r.required().positive().integer(),
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       description: '3–4 sentences in parent voice. Lead with child benefit.',

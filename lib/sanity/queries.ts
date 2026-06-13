@@ -5,6 +5,7 @@ const PRODUCT_FIELDS = /* groq */ `
   name,
   "slug": slug.current,
   tagline,
+  price,
   description,
   ageBand,
   shape,
@@ -27,8 +28,8 @@ export const ALL_PUBLISHED_PRODUCTS_QUERY = groq`
     }
 `
 
-export const PRODUCTS_BY_AGE_QUERY = groq`
-  *[_type == "product" && published == true && ageBand == $age]
+export const PRODUCTS_BY_SHAPE_QUERY = groq`
+  *[_type == "product" && published == true && shape == $shape]
     | order(order asc, name asc) {
       ${PRODUCT_FIELDS}
     }

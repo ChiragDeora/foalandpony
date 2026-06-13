@@ -1,7 +1,3 @@
-# Top-level Medusa backend (parked — not used since we moved to Sanity)
-# Leading slash anchors to the repo root so this doesn't match lib/medusa.
-/medusa/
-
 # Source material, never deploy
 /instructions/
 DEPLOY.md

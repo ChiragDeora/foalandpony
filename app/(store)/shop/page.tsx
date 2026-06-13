@@ -1,22 +1,17 @@
 import { ProductGrid } from '@/components/shop/ProductGrid'
 import { CollectionFilters } from '@/components/shop/CollectionFilters'
-import { listAllProducts, listProductsByAge } from '@/lib/sanity/products'
-import type { AgeBand } from '@/lib/sanity/types'
+import { listAllProducts, listProductsByShape } from '@/lib/sanity/products'
+import { isProductShape } from '@/lib/sanity/shapes'
 
 type Props = {
-  searchParams: Promise<{ age?: string }>
-}
-
-function asAgeBand(value: string | undefined): AgeBand | undefined {
-  if (value === '4-7' || value === '8-12' || value === '13+') return value
-  return undefined
+  searchParams: Promise<{ shape?: string }>
 }
 
 export default async function ShopPage({ searchParams }: Props) {
   const params = await searchParams
-  const age = asAgeBand(params.age)
+  const shape = isProductShape(params.shape) ? params.shape : undefined
 
-  const products = age ? await listProductsByAge(age) : await listAllProducts()
+  const products = shape ? await listProductsByShape(shape) : await listAllProducts()
 
   return (
     <div className="shop-page">
@@ -29,12 +24,12 @@ export default async function ShopPage({ searchParams }: Props) {
           </h1>
         </div>
         <p>
-          Nineteen models, a hundred-plus colours, three age bands. Every frame
+          Nineteen models, a hundred-plus colours, every face shape covered. Every frame
           designed for Indian kids, by Stallion Eyewear.
         </p>
       </div>
 
-      <CollectionFilters active={age} />
+      <CollectionFilters active={shape} />
       <ProductGrid products={products} />
     </div>
   )

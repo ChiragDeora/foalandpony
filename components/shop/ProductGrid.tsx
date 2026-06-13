@@ -17,7 +17,7 @@ export function ProductGrid({ products }: { products: FoalProduct[] }) {
         <div className="shop-empty-ctas">
           <Link href="/fit" className="btn btn-primary">Find your fit</Link>
           <a
-            href="https://wa.me/919999999999"
+            href="https://wa.me/919324337504"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-ghost"

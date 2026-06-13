@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { getProductBySlug } from '@/lib/sanity/products'
 import { urlFor } from '@/lib/sanity/client'
+import { formatInr } from '@/lib/util/money'
+import { AddToCart } from '@/components/shop/AddToCart'
 
 type Props = {
   params: Promise<{ handle: string }>
@@ -20,7 +22,7 @@ export default async function ProductPage({ params }: Props) {
   const product = await getProductBySlug(handle)
   if (!product) notFound()
 
-  const heroImage = product.colours?.find((c) => c.image)?.image
+  const heroImage = product.colours?.find((c) => c.image)?.image ?? product.lifestyleImages?.[0]
   const heroUrl = heroImage ? urlFor(heroImage).width(1100).height(1100).fit('crop').url() : null
 
   return (
@@ -40,6 +42,7 @@ export default async function ProductPage({ params }: Props) {
           <span className="shop-page-kicker">{AGE_LABEL[product.ageBand]}</span>
           <h1>{product.name}</h1>
           {product.tagline && <p className="product-detail-tagline">{product.tagline}</p>}
+          <p className="product-detail-price">{formatInr(product.price)}</p>
 
           {product.sizeCode && (
             <div className="product-detail-size">
@@ -48,21 +51,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
           )}
 
-          {product.colours && product.colours.length > 0 && (
-            <div className="product-detail-colours">
-              <span className="product-detail-section-lbl">
-                {product.colours.length} colour{product.colours.length === 1 ? '' : 's'}
-              </span>
-              <div className="product-detail-swatches">
-                {product.colours.map((c, i) => (
-                  <span key={i} className="product-detail-swatch" title={c.name}>
-                    <span className="product-detail-swatch-dot" style={{ background: c.hex }} />
-                    <span className="product-detail-swatch-name">{c.name}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          <AddToCart product={product} />
 
           {product.description && (
             <div className="product-detail-desc">
@@ -72,7 +61,7 @@ export default async function ProductPage({ params }: Props) {
 
           <div className="product-detail-ctas">
             <a
-              href={`https://wa.me/919999999999?text=${encodeURIComponent(
+              href={`https://wa.me/919324337504?text=${encodeURIComponent(
                 `Hi! I'd like to ask about the ${product.name} frame.`
               )}`}
               target="_blank"

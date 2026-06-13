@@ -356,7 +356,7 @@ img { display: block; max-width: 100%; }
   z-index: 5;
 }
 .hero-mascot-pony {
-  right: 2%;
+  right: -4%;
   bottom: -2px;
   width: 150px;
   z-index: 7;

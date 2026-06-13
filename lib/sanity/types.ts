@@ -21,6 +21,7 @@ export type FoalProduct = {
   name: string
   slug: string
   tagline?: string
+  price: number
   description?: PortableTextBlock[]
   ageBand: AgeBand
   shape?: string
