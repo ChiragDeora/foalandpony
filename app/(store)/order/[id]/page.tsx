@@ -60,7 +60,7 @@ export default async function OrderConfirmationPage({ params }: Props) {
       </p>
 
       {typedOrder.status === 'pending_payment' && (
-        <p className="checkout-status">Payment pending — we&apos;ll be in touch shortly.</p>
+        <p className="checkout-status">Payment pending - we&apos;ll be in touch shortly.</p>
       )}
 
       <ul className="cart-line-list">

@@ -3,10 +3,12 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
-import { DocumentsIcon } from '@sanity/icons'
+import { DocumentsIcon, DropIcon, TagIcon } from '@sanity/icons'
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schemaTypes } from './sanity/schemas'
 import { BulkImportTool } from './sanity/tools/BulkImportTool'
+import { PriceImportTool } from './sanity/tools/PriceImportTool'
+import { ColourSyncTool } from './sanity/tools/ColourSyncTool'
 
 export default defineConfig({
   basePath: '/studio',
@@ -76,6 +78,18 @@ export default defineConfig({
       title: 'Bulk import',
       icon: DocumentsIcon,
       component: BulkImportTool,
+    },
+    {
+      name: 'price-import',
+      title: 'Price import',
+      icon: TagIcon,
+      component: PriceImportTool,
+    },
+    {
+      name: 'colour-sync',
+      title: 'Colour names',
+      icon: DropIcon,
+      component: ColourSyncTool,
     },
   ],
 })

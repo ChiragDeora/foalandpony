@@ -75,7 +75,7 @@ export async function sendOrderConfirmationEmail({
     body: JSON.stringify({
       sender: { email: sender, name: 'Foal & Pony' },
       to: [{ email: to }],
-      subject: `Order confirmation — #${orderId}`,
+      subject: `Order confirmation - #${orderId}`,
       htmlContent: html,
     }),
   })

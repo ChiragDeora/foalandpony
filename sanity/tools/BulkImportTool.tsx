@@ -438,7 +438,7 @@ export function BulkImportTool() {
               {TECHS.join(', ')}) · published / featured (true/false) · order (number).
             </Text>
             <Text size={1} muted>
-              colours — semicolon-separated <code>Name:#hex</code> pairs, e.g.
+              colours - semicolon-separated <code>Name:#hex</code> pairs, e.g.
             </Text>
             <Code size={1}>Midnight:#1F3A5C; Sky Blue:#7BABE0; Coral:#D2766E</Code>
           </Stack>

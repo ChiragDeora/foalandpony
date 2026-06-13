@@ -16,6 +16,10 @@ export type ProductColour = {
   image?: SanityImageRef | null
 }
 
+export type LifestyleImage = SanityImageRef & {
+  filename?: string | null
+}
+
 export type FoalProduct = {
   _id: string
   name: string
@@ -30,5 +34,5 @@ export type FoalProduct = {
   featured?: boolean
   order?: number
   colours?: ProductColour[]
-  lifestyleImages?: SanityImageRef[]
+  lifestyleImages?: LifestyleImage[]
 }

@@ -2,21 +2,26 @@
 
 import { useMemo, useState } from 'react'
 import { urlFor } from '@/lib/sanity/client'
+import { colourImageFor } from '@/lib/sanity/colour-images'
 import type { FoalProduct } from '@/lib/sanity/types'
 import { useCart } from '@/lib/cart/cart-context'
+import { useProductColour } from './ProductColourContext'
 
 export function AddToCart({ product }: { product: FoalProduct }) {
   const { addItem } = useCart()
   const colours = product.colours ?? []
-  const [selected, setSelected] = useState(0)
+  const { selected, setSelected } = useProductColour()
   const [added, setAdded] = useState(false)
 
   const colour = colours[selected]
 
   const image = useMemo(() => {
-    const source = colour?.image ?? product.colours?.find((c) => c.image)?.image
+    const source =
+      (colour && colourImageFor(product, colour)) ??
+      product.colours?.find((c) => c.image)?.image ??
+      product.lifestyleImages?.[0]
     return source ? urlFor(source).width(640).height(640).fit('crop').url() : null
-  }, [colour, product.colours])
+  }, [colour, product])
 
   function handleAdd() {
     addItem({
@@ -37,7 +42,7 @@ export function AddToCart({ product }: { product: FoalProduct }) {
       {colours.length > 1 && (
         <div className="product-detail-colours">
           <span className="product-detail-section-lbl">
-            {colours.length} colours — choose one
+            {colours.length} colours - choose one
           </span>
           <div className="product-detail-swatches">
             {colours.map((c, i) => (

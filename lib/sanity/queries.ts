@@ -18,7 +18,10 @@ const PRODUCT_FIELDS = /* groq */ `
     hex,
     "image": image,
   },
-  "lifestyleImages": lifestyleImages,
+  "lifestyleImages": lifestyleImages[]{
+    ...,
+    "filename": asset->originalFilename
+  },
 `
 
 export const ALL_PUBLISHED_PRODUCTS_QUERY = groq`
