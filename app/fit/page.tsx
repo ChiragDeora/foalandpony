@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { InteractiveSizeChart } from '@/components/shop/InteractiveSizeChart'
 
-/* Local icon set */
+// Local icon set
 function Ic({ name, size = 22 }: { name: string; size?: number }) {
   const s = size
   const common = {
@@ -131,7 +131,7 @@ export default function FitPage() {
 
   return (
     <div>
-      {/* NAV (same shell as homepage) */}
+      {/* NAV (same shell as homepage) * /}
       <nav className="nav">
         <div className="nav-inner">
           <Link href="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
@@ -155,7 +155,7 @@ export default function FitPage() {
         </div>
       </nav>
 
-      {/* ====== HERO ====== */}
+      {/* ====== HERO ====== * /}
       <header className="fit-hero">
         <div className="container fit-hero-grid">
           <div>
@@ -187,7 +187,7 @@ export default function FitPage() {
         </div>
       </header>
 
-      {/* ====== STEP 1: READ THE NUMBERS ====== */}
+      {/* ====== STEP 1: READ THE NUMBERS ====== * /}
       <section className="section" id="dim">
         <div className="container fit-dim-grid">
           <div>
@@ -229,7 +229,7 @@ export default function FitPage() {
         </div>
       </section>
 
-      {/* ====== STEP 2: AGE GROUPS ====== */}
+      {/* ====== STEP 2: AGE GROUPS ====== * /}
       <section className="section fit-ages" id="age">
         <div className="container">
           <div className="s-head">
@@ -249,7 +249,7 @@ export default function FitPage() {
         </div>
       </section>
 
-      {/* ====== STEP 3: HOW TO MEASURE ====== */}
+      {/* ====== STEP 3: HOW TO MEASURE ====== * /}
       <section className="section" id="measure">
         <div className="container">
           <div className="s-head">
@@ -287,7 +287,7 @@ export default function FitPage() {
         </div>
       </section>
 
-      {/* ====== STEP 4: TECHNOLOGY ====== */}
+      {/* ====== STEP 4: TECHNOLOGY ====== * /}
       <section className="section fit-tech" id="tech">
         <div className="container">
           <div className="s-head">
@@ -321,7 +321,7 @@ export default function FitPage() {
         </div>
       </section>
 
-      {/* ====== QUICK TIPS ====== */}
+      {/* ====== QUICK TIPS ====== * /}
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="tips-card">
@@ -347,7 +347,7 @@ export default function FitPage() {
         </div>
       </section>
 
-      {/* ====== FINAL CTA ====== */}
+      {/* ====== FINAL CTA ====== * /}
       <section className="finale">
         <div className="container">
           <Image
