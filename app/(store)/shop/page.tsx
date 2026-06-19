@@ -1,9 +1,11 @@
-import { ProductGrid } from '@/components/shop/ProductGrid'
+// shop page hidden until pricing launch — redirecting to collections
+import { redirect } from 'next/navigation'
+/* import { ProductGrid } from '@/components/shop/ProductGrid'
 import { CollectionFilters } from '@/components/shop/CollectionFilters'
 import { listAllProducts, listProductsByShape } from '@/lib/sanity/products'
-import { isProductShape } from '@/lib/sanity/shapes'
+import { isProductShape } from '@/lib/sanity/shapes' */
 
-type Props = {
+/* type Props = {
   searchParams: Promise<{ shape?: string }>
 }
 
@@ -19,7 +21,7 @@ export default async function ShopPage({ searchParams }: Props) {
         <div>
           <span className="shop-page-kicker">The collection.</span>
           <h1>
-            Frames they&apos;ll{' '}
+            Frames they'll{' '}
             <em style={{ fontStyle: 'italic', color: 'var(--orange)' }}>actually</em> wear.
           </h1>
         </div>
@@ -33,4 +35,8 @@ export default async function ShopPage({ searchParams }: Props) {
       <ProductGrid products={products} />
     </div>
   )
+} */
+
+export default function ShopPage() {
+  redirect('/collections')
 }

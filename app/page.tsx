@@ -231,14 +231,12 @@ export default function Home() {
             <Image src="/assets/foalandpony_wordmark.png" alt="Foal & Pony" width={160} height={42} priority />
           </Link>
           <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
-            <li><Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link></li>
+            {/* <li><Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link></li> */}
             <li><Link href="/collections" onClick={() => setMenuOpen(false)}>Collections</Link></li>
-            <li><Link href="/fit" onClick={() => setMenuOpen(false)}>Find your fit</Link></li>
+            {/* <li><Link href="/fit" onClick={() => setMenuOpen(false)}>Find your fit</Link></li> */}
           </ul>
           <div className="nav-actions">
-            <Link href="/cart" className="nav-cart" aria-label="Cart">
-              <Icon name="cart" size={20} /> Cart
-            </Link>
+            {/* <Link href="/cart" className="nav-cart" aria-label="Cart"><Icon name="cart" size={20} /> Cart</Link> */}
             <button
               className="nav-burger"
               onClick={() => setMenuOpen(v => !v)}
@@ -265,10 +263,11 @@ export default function Home() {
               to wear them.
             </p>
             <div className="hero-ctas">
-              <Link href="/shop" className="btn btn-primary">
-                Shop the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+              {/* <Link href="/shop" className="btn btn-primary">Shop the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span></Link> */}
+              <Link href="/collections" className="btn btn-primary">
+                See the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
               </Link>
-              <Link href="/fit" className="btn btn-ghost">Find your fit</Link>
+              {/* <Link href="/fit" className="btn btn-ghost">Find your fit</Link> */}
             </div>
             <div className="hero-trust">
               <span className="hero-stars">★★★★★</span>
@@ -427,7 +426,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ FIND YOUR FIT ============ */}
+      {/* ============ FIND YOUR FIT — hidden until launch ============
       <section className="section fit" id="fit">
         <div className="container">
           <div className="fit-card">
@@ -437,7 +436,7 @@ export default function Home() {
                 The right size, <em>first time.</em>
               </h2>
               <p>
-                No more guesswork. Match your child&apos;s age and a couple of measurements
+                No more guesswork. Match your child's age and a couple of measurements
                 to the perfect frame in under a minute, using our visual size guide.
               </p>
               <div className="fit-steps">
@@ -446,7 +445,7 @@ export default function Home() {
                 <span className="fit-step"><b>3</b> Match a frame</span>
               </div>
               <Link href="/fit" className="btn btn-primary">
-                Open the size guide <span className="btn-arrow"><Icon name="ruler" size={18} /></span>
+                Open the size guide
               </Link>
             </div>
             <div className="fit-img">
@@ -465,6 +464,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
 
       {/* ============ SOCIAL PROOF ============ */}
       <section className="section proof">
@@ -556,10 +556,11 @@ export default function Home() {
             Free shipping across India and easy returns, no fuss.
           </p>
           <div className="hero-ctas">
-            <Link href="/shop" className="btn btn-primary">
-              Shop the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+            {/* <Link href="/shop" className="btn btn-primary">Shop the collection</Link> */}
+            {/* <Link href="/fit" className="btn btn-ghost">Find your fit</Link> */}
+            <Link href="/collections" className="btn btn-primary">
+              See the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
             </Link>
-            <Link href="/fit" className="btn btn-ghost">Find your fit</Link>
           </div>
           <div className="finale-note">
             <Icon name="badge" size={16} /> Free shipping across India · easy returns
@@ -594,6 +595,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
+            {/* footer Shop column — hidden until launch
             <div className="footer-col">
               <h4>Shop</h4>
               <ul>
@@ -603,10 +605,17 @@ export default function Home() {
                 <li><Link href="/shop?shape=oval">Oval</Link></li>
               </ul>
             </div>
+            */}
+            <div className="footer-col">
+              <h4>Explore</h4>
+              <ul>
+                <li><Link href="/collections">Collections</Link></li>
+              </ul>
+            </div>
             <div className="footer-col">
               <h4>Help</h4>
               <ul>
-                <li><Link href="/fit">Find your fit</Link></li>
+                {/* <li><Link href="/fit">Find your fit</Link></li> */}
                 <li><Link href="/policies/care">Care guide</Link></li>
                 <li><Link href="/policies/shipping">Shipping &amp; returns</Link></li>
                 <li><Link href="/contact">Contact us</Link></li>

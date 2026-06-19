@@ -9,7 +9,7 @@ export function ShopFooter() {
           <p className="shop-footer-tagline">Premium kids eyewear</p>
         </div>
         <div className="shop-footer-links">
-          <Link href="/shop">Shop</Link>
+          <Link href="/collections">Collections</Link>
           <Link href="/policies/shipping">Shipping</Link>
           <Link href="/policies/returns">Returns</Link>
           <Link href="/policies/privacy">Privacy</Link>

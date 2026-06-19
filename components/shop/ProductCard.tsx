@@ -48,7 +48,7 @@ export function ProductCard({ product }: { product: FoalProduct }) {
         <div className="product-card-body">
           <h3>{product.name}</h3>
           {product.tagline && <p className="product-card-tagline">{product.tagline}</p>}
-          <p className="product-card-price">{formatInr(product.price)}</p>
+          {/* <p className="product-card-price">{formatInr(product.price)}</p> */}
         </div>
       </Link>
     </article>

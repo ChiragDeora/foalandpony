@@ -5,10 +5,10 @@ import { useState } from 'react'
 import { useCart } from '@/lib/cart/cart-context'
 
 const navLinks = [
-  { href: '/shop', label: 'Shop' },
+  // { href: '/shop', label: 'Shop' },       // hidden until launch
   { href: '/collections', label: 'Collections' },
-  { href: '/fit', label: 'Find your fit' },
-  { href: '/cart', label: 'Cart' },
+  // { href: '/fit', label: 'Find your fit' }, // hidden until launch
+  // { href: '/cart', label: 'Cart' },          // hidden until launch
 ]
 
 export function ShopNav() {

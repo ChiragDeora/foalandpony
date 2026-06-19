@@ -1,4 +1,7 @@
-import { auth, currentUser } from '@clerk/nextjs/server'
+// checkout hidden until pricing launch
+import { redirect } from 'next/navigation'
+
+/* import { auth, currentUser } from '@clerk/nextjs/server'
 import { CheckoutView } from '@/components/shop/CheckoutView'
 import { createAdminClient } from '@/lib/supabase/admin'
 import type { InitialContact, InitialShipping } from '@/components/shop/CheckoutForm'
@@ -39,4 +42,8 @@ export default async function CheckoutPage() {
       <CheckoutView initialContact={initialContact} initialShipping={initialShipping} />
     </div>
   )
+} */
+
+export default function CheckoutPage() {
+  redirect('/collections')
 }
