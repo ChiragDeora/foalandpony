@@ -7,7 +7,7 @@ import type { Appearance } from '@clerk/types'
  *
  * Palette mirrors the CSS variables in app/globals.css.
  */
-const orange = '#F39C12'
+const orange = '#FF8C00'
 const orangeHover = '#E08E0B'
 const navy = '#1F3A5C'
 const cream = '#FFF8EE'
@@ -28,7 +28,7 @@ export const clerkAppearance: Appearance = {
     fontWeight: { normal: 500, medium: 600, bold: 700 },
   },
   elements: {
-    // Card shell — soft, rounded, brand shadow. Matches site cards.
+    // Card shell, soft, rounded, brand shadow. Matches site cards.
     card: {
       boxShadow: '0 30px 80px -32px rgba(31, 58, 92, 0.30)',
       border: `1px solid ${line}`,
@@ -43,7 +43,7 @@ export const clerkAppearance: Appearance = {
     },
     headerSubtitle: { color: 'rgba(31, 58, 92, 0.62)' },
 
-    // Primary CTA — brand orange pill.
+    // Primary CTA, brand orange pill.
     formButtonPrimary: {
       backgroundColor: orange,
       color: '#FFFFFF',
@@ -53,12 +53,12 @@ export const clerkAppearance: Appearance = {
       borderRadius: '999px',
       boxShadow: 'none',
       '&:hover': { backgroundColor: orangeHover },
-      '&:focus': { boxShadow: `0 0 0 3px rgba(243, 156, 18, 0.35)` },
+      '&:focus': { boxShadow: `0 0 0 3px rgba(255, 140, 0, 0.35)` },
     },
     formFieldInput: {
       borderRadius: '12px',
       borderColor: line,
-      '&:focus': { borderColor: orange, boxShadow: `0 0 0 3px rgba(243, 156, 18, 0.18)` },
+      '&:focus': { borderColor: orange, boxShadow: `0 0 0 3px rgba(255, 140, 0, 0.18)` },
     },
     formFieldLabel: { color: navy, fontWeight: 600 },
 
@@ -73,7 +73,7 @@ export const clerkAppearance: Appearance = {
     identityPreviewEditButton: { color: orange },
     formResendCodeLink: { color: orange },
 
-    // UserButton — avatar bubble + popover.
+    // UserButton, avatar bubble + popover.
     userButtonAvatarBox: {
       width: '40px',
       height: '40px',

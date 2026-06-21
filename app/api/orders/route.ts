@@ -122,7 +122,7 @@ export async function POST(request: Request) {
         { onConflict: 'clerk_user_id' }
       )
     } catch {
-      // best-effort — order is already created
+      // best-effort, order is already created
     }
   }
 
@@ -140,7 +140,7 @@ export async function POST(request: Request) {
       shipping,
     })
   } catch {
-    // best-effort — order is already created
+    // best-effort, order is already created
   }
 
   return NextResponse.json({ orderId: order.id })

@@ -24,7 +24,7 @@ async function loadXLSX() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Column spec — keep in sync with sanity/schemas/product.ts          */
+/* Column spec, keep in sync with sanity/schemas/product.ts          */
 /* ------------------------------------------------------------------ */
 
 const TEMPLATE_HEADERS = [

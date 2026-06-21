@@ -1,42 +1,34 @@
-// shop page hidden until pricing launch — redirecting to collections
-import { redirect } from 'next/navigation'
-/* import { ProductGrid } from '@/components/shop/ProductGrid'
-import { CollectionFilters } from '@/components/shop/CollectionFilters'
-import { listAllProducts, listProductsByShape } from '@/lib/sanity/products'
-import { isProductShape } from '@/lib/sanity/shapes' */
-
-/* type Props = {
-  searchParams: Promise<{ shape?: string }>
-}
-
-export default async function ShopPage({ searchParams }: Props) {
-  const params = await searchParams
-  const shape = isProductShape(params.shape) ? params.shape : undefined
-
-  const products = shape ? await listProductsByShape(shape) : await listAllProducts()
-
-  return (
-    <div className="shop-page">
-      <div className="shop-page-header">
-        <div>
-          <span className="shop-page-kicker">The collection.</span>
-          <h1>
-            Frames they'll{' '}
-            <em style={{ fontStyle: 'italic', color: 'var(--orange)' }}>actually</em> wear.
-          </h1>
-        </div>
-        <p>
-          Nineteen models, a hundred-plus colours, every face shape covered. Every frame
-          designed for Indian kids, by Stallion Eyewear.
-        </p>
-      </div>
-
-      <CollectionFilters active={shape} />
-      <ProductGrid products={products} />
-    </div>
-  )
-} */
+/* SHOP DISABLED, uncomment to enable post-launch. Original grid preserved in git history. */
 
 export default function ShopPage() {
-  redirect('/collections')
+  return (
+    <section
+      style={{
+        minHeight: '72vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: '80px 24px',
+        background: '#F5F3ED',
+      }}
+    >
+      <span className="fp-tag fp-tag-orange" style={{ marginBottom: 20 }}>Shop</span>
+      <h1
+        style={{
+          fontFamily: 'var(--fp-heading-font)',
+          fontWeight: 900,
+          fontSize: 'clamp(36px, 6vw, 64px)',
+          color: '#1A2B4A',
+          marginBottom: 14,
+        }}
+      >
+        Coming soon
+      </h1>
+      <p style={{ color: '#7A7A7A', fontSize: 18, maxWidth: 420, lineHeight: 1.6, fontFamily: 'var(--fp-body-font)' }}>
+        Our frames are almost ready. Check back shortly!
+      </p>
+    </section>
+  )
 }

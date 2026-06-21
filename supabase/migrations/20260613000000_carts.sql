@@ -6,4 +6,4 @@ create table if not exists public.carts (
 
 alter table public.carts enable row level security;
 -- No select/insert policies: only the service-role admin client (server-side,
--- bypasses RLS) reads or writes this table — matches the orders/order_items pattern.
+-- bypasses RLS) reads or writes this table, matches the orders/order_items pattern.

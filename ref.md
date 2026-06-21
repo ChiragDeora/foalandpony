@@ -1159,7 +1159,7 @@ const FoalPonyWebsite = () => {
               <div className="section-badge">Our Story</div>
               <h3>Born from a Parent's Frustration</h3>
               <p>
-                Every parent knows the struggle—glasses that break within weeks, frames that kids refuse to wear, and endless trips to the optician.
+                Every parent knows the struggle, glasses that break within weeks, frames that kids refuse to wear, and endless trips to the optician.
               </p>
               <p>
                 Foal & Pony was created to solve exactly that. We design eyewear that's as tough as your little ones, in colors they'll actually love wearing. Backed by Stallion Eyewear's decades of optical expertise.
@@ -1190,7 +1190,7 @@ const FoalPonyWebsite = () => {
             <div className="section-badge">Why Choose Us</div>
             <h2 className="section-title">Built Different. Built Better.</h2>
             <p className="section-subtitle">
-              Every frame is engineered with one thing in mind—surviving childhood.
+              Every frame is engineered with one thing in mind, surviving childhood.
             </p>
           </div>
           

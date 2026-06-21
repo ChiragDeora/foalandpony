@@ -92,7 +92,7 @@ export function CartProvider({
           if (!cancelled) setItems((local) => mergeCartItems(local, serverItems))
         }
       } catch {
-        // ignore — localStorage stays authoritative
+        // ignore, localStorage stays authoritative
       } finally {
         if (!cancelled) setServerSynced(true)
       }

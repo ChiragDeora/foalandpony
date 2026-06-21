@@ -1,4 +1,4 @@
-# Cursor Agent Plan — Foal & Pony Ecommerce
+# Cursor Agent Plan, Foal & Pony Ecommerce
 
 Copy everything below the line into a new Cursor Agent chat as the task prompt.
 
@@ -14,11 +14,11 @@ Finish **Foal & Pony** headless ecommerce: India D2C kids eyewear, scalable to 1
 ```
 Next.js 15 storefront (this repo)
   → Medusa Store API (products, cart, checkout, orders)
-  → Medusa Admin at /app (catalog CMS — bulk CSV import)
+  → Medusa Admin at /app (catalog CMS, bulk CSV import)
   → Clerk (customer sign-in on website)
   → Supabase (Postgres for Medusa + user_profiles/reviews tables)
   → Brevo (transactional email)
-  → Razorpay (India payments — Phase 2)
+  → Razorpay (India payments, Phase 2)
 ```
 
 Read first: [AUTH.md](AUTH.md), [ECOMMERCE.md](ECOMMERCE.md).
@@ -31,7 +31,7 @@ Read first: [AUTH.md](AUTH.md), [ECOMMERCE.md](ECOMMERCE.md).
 | ✅ | Store routes: `/shop`, `/shop/[handle]`, `/cart`, `/checkout`, `/order/[id]`, `/account` |
 | ✅ | Shop nav/header/footer `components/shop/*`, styles `app/store.css` |
 | ✅ | Medusa JS SDK data layer `lib/data/*`, `lib/config.ts` |
-| ✅ | `medusa/` — Medusa v2 starter (backend + admin) |
+| ✅ | `medusa/`, Medusa v2 starter (backend + admin) |
 | ✅ | Clerk middleware + sign-in/up + customer sync API |
 | ✅ | Supabase migration `supabase/migrations/20240529000000_user_profiles.sql` |
 | ✅ | `docker-compose.yml` (local Postgres + Redis) |
@@ -39,8 +39,8 @@ Read first: [AUTH.md](AUTH.md), [ECOMMERCE.md](ECOMMERCE.md).
 
 | Not done | Item |
 |----------|------|
-| ❌ | `medusa/.env` — **missing**; backend not running |
-| ❌ | `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` empty — shop shows warning banner |
+| ❌ | `medusa/.env`, **missing**; backend not running |
+| ❌ | `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` empty, shop shows warning banner |
 | ❌ | Razorpay payment in Medusa + checkout |
 | ❌ | Brevo order emails (subscriber stub) |
 | ❌ | `scripts/import-catalog.ts` (CSV bulk import) |
@@ -49,12 +49,12 @@ Read first: [AUTH.md](AUTH.md), [ECOMMERCE.md](ECOMMERCE.md).
 
 ## Critical env fixes (do first)
 
-User has root `.env` with errors — fix without committing secrets:
+User has root `.env` with errors, fix without committing secrets:
 
 1. **Rename or duplicate** to `.env.local` for Next.js (preferred).
-2. **`SUPABASE_SERVICE_ROLE_KEY`** must be the **service_role JWT** from Supabase Dashboard → Settings → API — **not** a Postgres URL.
-3. **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** must be the **anon public** key (`eyJ...`) — not `sb_publishable_...`.
-4. **`medusa/.env`** — create from `medusa/.env.template`:
+2. **`SUPABASE_SERVICE_ROLE_KEY`** must be the **service_role JWT** from Supabase Dashboard → Settings → API, **not** a Postgres URL.
+3. **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** must be the **anon public** key (`eyJ...`), not `sb_publishable_...`.
+4. **`medusa/.env`**, create from `medusa/.env.template`:
    - `DATABASE_URL` = Supabase **pooler** URI (port **6543**) OR `postgres://postgres:postgres@localhost:5432/medusa-v2` if using `npm run db:up`
    - `REDIS_URL=redis://localhost:6379`
    - `STORE_CORS=http://localhost:3000`
@@ -63,23 +63,23 @@ User has root `.env` with errors — fix without committing secrets:
 Medusa API keys (after `yarn dev` in `medusa/`):
 
 - Admin: http://localhost:9000/app
-- **Publishable** (`pk_...`) → `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` — Settings → Publishable API Keys
-- **Secret** (`sk_...`) → `MEDUSA_SECRET_API_KEY` — Settings → Secret API Keys
+- **Publishable** (`pk_...`) → `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`, Settings → Publishable API Keys
+- **Secret** (`sk_...`) → `MEDUSA_SECRET_API_KEY`, Settings → Secret API Keys
 
 ---
 
-## Phase 1 — Make the shop work locally (priority)
+## Phase 1, Make the shop work locally (priority)
 
 **Goal:** `/shop` shows seeded products; add to cart works.
 
 ### Steps
 
 ```bash
-# Terminal 1 — DB (choose ONE)
+# Terminal 1, DB (choose ONE)
 npm run db:up                                    # local Docker Postgres
 # OR use Supabase DATABASE_URL in medusa/.env
 
-# Terminal 2 — Medusa
+# Terminal 2, Medusa
 cd medusa
 cp .env.template .env   # then edit DATABASE_URL
 yarn install
@@ -88,7 +88,7 @@ yarn seed
 yarn dev
 # → http://localhost:9000/app
 
-# Terminal 3 — Storefront
+# Terminal 3, Storefront
 cp .env.example .env.local   # fill MEDUSA keys
 npm run dev
 # → http://localhost:3000/shop
@@ -112,7 +112,7 @@ npm run dev
 
 ---
 
-## Phase 2 — Payments & email
+## Phase 2, Payments & email
 
 **Goal:** Checkout completes with Razorpay; order confirmation email via Brevo.
 
@@ -132,13 +132,13 @@ npm run dev
 
 ---
 
-## Phase 3 — Catalog at scale
+## Phase 3, Catalog at scale
 
 **Goal:** Bulk import path for 10k SKUs.
 
 ### Agent tasks
 
-1. Implement `scripts/import-catalog.ts` — read CSV, Medusa Admin API batch create products/variants.
+1. Implement `scripts/import-catalog.ts`, read CSV, Medusa Admin API batch create products/variants.
 2. Document image bulk upload to Supabase Storage or R2; CSV `image_url` column.
 3. Optional: Meilisearch when catalog > 500 SKUs.
 
@@ -150,7 +150,7 @@ Reference: `scripts/sample-catalog.csv`
 
 ---
 
-## Phase 4 — Polish & deploy
+## Phase 4, Polish & deploy
 
 1. Clerk keys → sign-in + `/account` order history (Medusa customer orders).
 2. Run Supabase migration for `user_profiles` + `reviews`; wire homepage review form.
@@ -177,7 +177,7 @@ Reference: `scripts/sample-catalog.csv`
 ## Constraints for the agent
 
 - **Minimize scope** per phase; don’t refactor marketing homepage unless needed.
-- **Do not** rebuild catalog in Supabase tables — Medusa owns commerce.
+- **Do not** rebuild catalog in Supabase tables, Medusa owns commerce.
 - **Do not** subscribe to Medusa Cloud.
 - **Do not** commit secrets or force-push.
 - Match existing code style (TypeScript, App Router, server actions).
@@ -187,7 +187,7 @@ Reference: `scripts/sample-catalog.csv`
 
 | Problem | Action |
 |---------|--------|
-| Admin won’t open | Medusa not running — check `medusa/.env` + `yarn dev` logs |
+| Admin won’t open | Medusa not running, check `medusa/.env` + `yarn dev` logs |
 | No products on shop | Run `yarn seed`; check publishable key linked to sales channel |
 | Styles broken | Ensure `app/store.css` imported in `app/layout.tsx`; restart dev server |
 | Region errors | Seed creates India region; `NEXT_PUBLIC_DEFAULT_REGION=in` |

@@ -35,13 +35,13 @@ Localhost is only for development. Production uses the hosts above.
 ## Prerequisites
 
 - [ ] GitHub repo pushed (private or public)
-- [ ] Domain (e.g. `foalandpony.com`) — DNS access at your registrar
+- [ ] Domain (e.g. `foalandpony.com`), DNS access at your registrar
 - [ ] Supabase project (already set up)
 - [ ] Medusa seeded (products, publishable key, admin user)
 
 ---
 
-## Step 1 — Database & Redis (keep Supabase, add Upstash)
+## Step 1, Database & Redis (keep Supabase, add Upstash)
 
 ### Postgres (Supabase)
 
@@ -51,7 +51,7 @@ You already use Supabase. For production Medusa:
 2. Copy **Connection string → URI** (use **Transaction pooler**, port **6543**)
 3. This becomes `DATABASE_URL` on the Medusa host (not in the Next.js app)
 
-### Redis (Upstash — free)
+### Redis (Upstash, free)
 
 Medusa needs Redis in production (not the fake in-memory one).
 
@@ -60,7 +60,7 @@ Medusa needs Redis in production (not the fake in-memory one).
 
 ---
 
-## Step 2 — Deploy Medusa backend (Railway recommended)
+## Step 2, Deploy Medusa backend (Railway recommended)
 
 ### Railway
 
@@ -103,7 +103,7 @@ DATABASE_URL="your-supabase-pooler-url" yarn seed   # only if empty DB
 
 ---
 
-## Step 3 — Deploy storefront (Vercel)
+## Step 3, Deploy storefront (Vercel)
 
 1. [vercel.com](https://vercel.com) → **Add New Project** → import GitHub `foalandpony`
 2. **Root directory:** `.` (repo root, not `medusa`)
@@ -123,7 +123,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/account
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/account
 
-# Supabase (fix keys — use Dashboard → API, not Postgres URL)
+# Supabase (fix keys, use Dashboard → API, not Postgres URL)
 NEXT_PUBLIC_SUPABASE_URL=https://afmmqcmfmwimkkykxrby.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...anon...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...service_role...
@@ -144,7 +144,7 @@ In [Clerk Dashboard](https://dashboard.clerk.com):
 
 ---
 
-## Step 4 — DNS (so the company has one link)
+## Step 4, DNS (so the company has one link)
 
 At your domain registrar (GoDaddy, Cloudflare, etc.):
 
@@ -160,13 +160,13 @@ At your domain registrar (GoDaddy, Cloudflare, etc.):
 
 ---
 
-## Step 5 — Checklist before sharing
+## Step 5, Checklist before sharing
 
 - [ ] `https://foalandpony.com/shop` loads products (no yellow “backend not connected” banner)
 - [ ] `https://api.foalandpony.com/health` returns OK
 - [ ] Admin login works on production URL
 - [ ] `STORE_CORS` includes your real shop domain (no typos)
-- [ ] Secrets are only in Vercel/Railway dashboards — **not** committed to Git
+- [ ] Secrets are only in Vercel/Railway dashboards, **not** committed to Git
 - [ ] `.env` / `.env.local` stay local; use host env UIs for production
 
 ---
@@ -182,7 +182,7 @@ At your domain registrar (GoDaddy, Cloudflare, etc.):
 | Clerk | Free tier (10k MAU) |
 | Domain | ~₹500–1000/year |
 
-**Not required:** Medusa Cloud ($29/mo) — you self-host on Railway.
+**Not required:** Medusa Cloud ($29/mo), you self-host on Railway.
 
 ---
 
@@ -203,7 +203,7 @@ At your domain registrar (GoDaddy, Cloudflare, etc.):
 | Shop empty / banner on live site | Wrong `MEDUSA_BACKEND_URL` or missing `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` on Vercel |
 | CORS error in browser | Add exact `https://foalandpony.com` to `STORE_CORS` on Medusa, redeploy |
 | Admin login fails on prod | Run password reset script against prod DB, or use reset flow on prod Admin URL |
-| Medusa crashes | Set `REDIS_URL` (Upstash) — required for production |
+| Medusa crashes | Set `REDIS_URL` (Upstash), required for production |
 
 ---
 

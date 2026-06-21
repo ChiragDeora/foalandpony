@@ -1,10 +1,10 @@
-# Foal & Pony — Ecommerce Structure
+# Foal & Pony, Ecommerce Structure
 
 Headless commerce: **Medusa** (catalog, cart, orders, admin CMS) + **Next.js** (storefront) + **Clerk** (customer auth) + **Supabase** (Postgres for Medusa + profile/review tables) + **Razorpay** + **Brevo**.
 
 See **[AUTH.md](AUTH.md)** for how Clerk, Supabase, and Medusa work together.
 
-> **Status:** Storefront scaffolded — `/shop`, `/cart`, `/checkout`, shop nav, Medusa data layer. Connect Medusa + publishable key to load products.
+> **Status:** Storefront scaffolded, `/shop`, `/cart`, `/checkout`, shop nav, Medusa data layer. Connect Medusa + publishable key to load products.
 
 ---
 
@@ -138,7 +138,7 @@ BREVO_API_KEY=
 BREVO_SENDER_EMAIL=hello@foalandpony.com
 ```
 
-### Razorpay (Medusa payment module — Phase 1b)
+### Razorpay (Medusa payment module, Phase 1b)
 
 ```bash
 RAZORPAY_KEY_ID=

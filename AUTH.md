@@ -1,6 +1,6 @@
 # Auth & data: Clerk + Supabase + Medusa
 
-Three services, **one job each** — do not duplicate commerce tables in Supabase.
+Three services, **one job each**, do not duplicate commerce tables in Supabase.
 
 ```mermaid
 flowchart LR
@@ -88,8 +88,8 @@ Create a **Secret API Key** in Medusa Admin → Settings → Secret API Keys →
 
 ## What not to do
 
-- Do **not** store products/orders/carts in Supabase — Medusa owns commerce.
-- Do **not** use Clerk for **merchant** admin — use Medusa Admin (`http://localhost:9000/app`).
+- Do **not** store products/orders/carts in Supabase, Medusa owns commerce.
+- Do **not** use Clerk for **merchant** admin, use Medusa Admin (`http://localhost:9000/app`).
 - Do **not** put `SUPABASE_SERVICE_ROLE_KEY` in client code.
 
 ## Free tiers

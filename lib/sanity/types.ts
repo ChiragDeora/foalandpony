@@ -1,6 +1,6 @@
 import type { PortableTextBlock } from 'sanity'
 
-// Loose Sanity image source shape — what GROQ returns for image fields.
+// Loose Sanity image source shape, what GROQ returns for image fields.
 export type SanityImageRef = {
   _type?: string
   asset?: { _ref?: string; _type?: string }

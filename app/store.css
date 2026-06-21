@@ -1,4 +1,4 @@
-/* Storefront — uses tokens from globals.css */
+/* Storefront, uses tokens from globals.css */
 .store-shell {
   min-height: 100vh;
   display: flex;
@@ -88,11 +88,11 @@
 .shop-btn-primary {
   background: var(--orange);
   color: white;
-  box-shadow: 0 8px 20px -8px rgba(243, 156, 18, .55);
+  box-shadow: 0 8px 20px -8px rgba(255, 140, 0, .55);
 }
 .shop-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px -10px rgba(243, 156, 18, .65);
+  box-shadow: 0 14px 28px -10px rgba(255, 140, 0, .65);
 }
 .shop-btn-ghost {
   background: var(--paper);
@@ -439,7 +439,7 @@
 }
 .shop-banner-warn {
   background: var(--orange-soft);
-  border: 1px solid rgba(243,156,18,.32);
+  border: 1px solid rgba(255, 140, 0,.32);
   color: #6F4500;
 }
 .shop-banner-title {
@@ -464,7 +464,7 @@
 /* ==== Backend status banner ==== */
 .backend-banner {
   background: var(--orange-soft);
-  border: 1px solid rgba(243,156,18,.35);
+  border: 1px solid rgba(255, 140, 0,.35);
   color: #6F4500;
   padding: 14px 22px;
   border-radius: 14px;

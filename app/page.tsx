@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Navbar } from '@/components/Navbar'
+import { useTheme } from '@/context/ThemeContext'
 
 
-/* Inline icon set — quirky outline strokes, drawn here so we don't ship a UI lib */
+/* Inline icon set, quirky outline strokes, drawn here so we don't ship a UI lib */
 function Icon({ name, size = 22 }: { name: string; size?: number }) {
   const s = size
   const stroke = 'currentColor'
@@ -159,13 +160,6 @@ const tests = [
   { ic: 'splash', title: 'The everything-else test', body: 'Sand. Pool water. Pasta sauce. Backpack bottoms. All survived.' },
 ]
 
-const fitSpecs = [
-  { key: 'lens', mark: 'A', label: 'Lens', value: '44-50 mm', color: '#3F8B4D' },
-  { key: 'bridge', mark: 'B', label: 'Bridge', value: '15-18 mm', color: '#2E83BD' },
-  { key: 'total', mark: 'C', label: 'Total width', value: '103-117 mm', color: '#B96E00' },
-  { key: 'temple', mark: 'D', label: 'Temple', value: '130-138 mm', color: '#7245A0' },
-]
-
 const testimonials = [
   {
     body: 'Third pair of glasses in a year, until these. Six months of football and they still look new. We are genuinely shocked.',
@@ -184,74 +178,113 @@ const testimonials = [
   },
 ]
 
-function AgeFrameSilhouette({ shape, color }: { shape: 'round' | 'square' | 'rectangle'; color: string }) {
-  if (shape === 'round') {
-    return (
-      <svg viewBox="0 0 320 160" className="age-frame-svg" aria-hidden>
-        <circle cx="80" cy="80" r="56" fill="none" stroke={color} strokeWidth="6" />
-        <circle cx="240" cy="80" r="56" fill="none" stroke={color} strokeWidth="6" />
-        <path d="M136 76 q24 -14 48 0" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-        <path d="M24 78 q-12 -4 -22 -2" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-        <path d="M296 78 q12 -4 22 -2" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-      </svg>
-    )
-  }
-  if (shape === 'square') {
-    return (
-      <svg viewBox="0 0 320 160" className="age-frame-svg" aria-hidden>
-        <rect x="22" y="36" width="116" height="92" rx="18" fill="none" stroke={color} strokeWidth="6" />
-        <rect x="182" y="36" width="116" height="92" rx="18" fill="none" stroke={color} strokeWidth="6" />
-        <path d="M138 70 q22 -14 44 0" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-        <path d="M22 78 q-12 -4 -22 -2" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-        <path d="M298 78 q12 -4 22 -2" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-      </svg>
-    )
-  }
-  // rectangle
+/* ─── Kids floating decorations: clouds, stars, sparkles, confetti ─── */
+function Star({ fill, size }: { fill: string; size: number }) {
   return (
-    <svg viewBox="0 0 320 160" className="age-frame-svg" aria-hidden>
-      <rect x="18" y="48" width="128" height="68" rx="14" fill="none" stroke={color} strokeWidth="6" />
-      <rect x="174" y="48" width="128" height="68" rx="14" fill="none" stroke={color} strokeWidth="6" />
-      <path d="M146 76 q14 -8 28 0" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-      <path d="M18 82 q-12 -4 -22 -2" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
-      <path d="M302 82 q12 -4 22 -2" stroke={color} strokeWidth="6" fill="none" strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} aria-hidden>
+      <path d="M12 2l2.5 6.4L21 9l-5 4.2L17.6 20 12 16.3 6.4 20 8 13.2 3 9l6.5-.6z" />
     </svg>
+  )
+}
+function Sparkle({ fill, size }: { fill: string; size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} aria-hidden>
+      <path d="M12 0c1.1 5.6 5.3 9.8 12 12-6.7 2.2-10.9 6.4-12 12-1.1-5.6-5.3-9.8-12-12 6.7-2.2 10.9-6.4 12-12z" />
+    </svg>
+  )
+}
+function Balloon({ color, size, style }: { color: string; size: number; style?: React.CSSProperties }) {
+  return (
+    <div className="kd kd-balloon" style={style} aria-hidden>
+      <svg width={size} height={size * 1.5} viewBox="0 0 40 60" fill="none">
+        <ellipse cx="20" cy="20" rx="17" ry="20" fill={color} />
+        <ellipse cx="14" cy="13" rx="5" ry="7" fill="rgba(255,255,255,.35)" />
+        <path d="M20 40 l-3 4 6 0 z" fill={color} />
+        <path d="M20 44 q4 8 -1 16" stroke="rgba(31,58,92,.35)" strokeWidth="1.5" fill="none" />
+      </svg>
+    </div>
+  )
+}
+function KidsDecor() {
+  return (
+    <div className="kids-decor" aria-hidden>
+      {/* clouds drifting across the top, above the kids' heads */}
+      <div className="kd kd-cloud kd-drift" style={{ width: 156, height: 56, top: '5%', left: '5%' }} />
+      <div className="kd kd-cloud kd-drift" style={{ width: 116, height: 42, top: '3%', left: '38%', animationDelay: '-4s', animationDuration: '20s' }} />
+      <div className="kd kd-cloud kd-drift" style={{ width: 138, height: 50, top: '9%', right: '22%', animationDelay: '-8s' }} />
+      <div className="kd kd-cloud kd-drift" style={{ width: 96, height: 36, top: '4%', right: '4%', animationDelay: '-12s', animationDuration: '22s' }} />
+      {/* twinkling stars, spread across top strip + right side, clear of the text block */}
+      <div className="kd kd-twinkle" style={{ top: '13%', left: '10%' }}><Star fill="#FFC23C" size={48} /></div>
+      <div className="kd kd-twinkle" style={{ top: '9%', left: '30%' }}><Star fill="#3FA9F5" size={28} /></div>
+      <div className="kd kd-twinkle" style={{ top: '18%', right: '30%', animationDelay: '.6s' }}><Star fill="#FF6FB5" size={38} /></div>
+      <div className="kd kd-twinkle" style={{ bottom: '18%', right: '24%', animationDelay: '1s' }}><Star fill="#57C84D" size={32} /></div>
+      <div className="kd kd-twinkle" style={{ top: '38%', right: '40%', animationDelay: '1.8s' }}><Star fill="#A368E8" size={26} /></div>
+      <div className="kd kd-twinkle" style={{ top: '52%', right: '7%', animationDelay: '1.4s' }}><Star fill="#FF5A5A" size={34} /></div>
+      {/* spinning sparkles */}
+      <div className="kd kd-spin" style={{ top: '8%', left: '20%' }}><Sparkle fill="#A368E8" size={34} /></div>
+      <div className="kd kd-spin" style={{ top: '24%', right: '18%' }}><Sparkle fill="#3FA9F5" size={42} /></div>
+      <div className="kd kd-spin" style={{ bottom: '14%', right: '34%', animationDuration: '24s' }}><Sparkle fill="#FFC23C" size={28} /></div>
+      {/* balloons bobbing up and down */}
+      <Balloon color="#57C84D" size={44} style={{ top: '13%', left: '6%' }} />
+      <Balloon color="#FF5A5A" size={52} style={{ top: '12%', right: '10%' }} />
+      <Balloon color="#A368E8" size={38} style={{ top: '34%', right: '44%', animationDelay: '-3.5s' }} />
+      {/* confetti dots twinkling slowly */}
+      <span className="kd kd-twinkle-slow" style={{ width: 16, height: 16, borderRadius: '50%', background: '#FFC23C', top: '7%', left: '24%' }} />
+      <span className="kd kd-twinkle-slow" style={{ width: 17, height: 17, borderRadius: '50%', background: '#2EC6C6', top: '26%', right: '16%', animationDelay: '.6s' }} />
+      <span className="kd kd-twinkle-slow" style={{ width: 14, height: 14, borderRadius: '50%', background: '#FF5A5A', bottom: '30%', right: '7%', animationDelay: '1.6s' }} />
+      <span className="kd kd-twinkle-slow" style={{ width: 16, height: 16, borderRadius: '50%', background: '#57C84D', top: '54%', right: '36%', animationDelay: '2.1s' }} />
+      <span className="kd kd-twinkle-slow" style={{ width: 18, height: 18, borderRadius: '50%', background: '#3FA9F5', bottom: '42%', right: '20%', animationDelay: '.3s' }} />
+      <span className="kd kd-twinkle-slow" style={{ width: 15, height: 15, borderRadius: '50%', background: '#A368E8', top: '20%', right: '46%', animationDelay: '1s' }} />
+      {/* left of the text (far-left margin) */}
+      <div className="kd kd-twinkle" style={{ top: '42%', left: '2%' }}><Star fill="#57C84D" size={30} /></div>
+      <div className="kd kd-spin" style={{ top: '62%', left: '3%', animationDuration: '20s' }}><Sparkle fill="#A368E8" size={26} /></div>
+      <span className="kd kd-twinkle-slow" style={{ width: 14, height: 14, borderRadius: '50%', background: '#FF6FB5', top: '54%', left: '2%' }} />
+      {/* below the text */}
+      <div className="kd kd-twinkle" style={{ bottom: '6%', left: '13%' }}><Star fill="#FFC23C" size={28} /></div>
+      <span className="kd kd-twinkle-slow" style={{ width: 16, height: 16, borderRadius: '50%', background: '#3FA9F5', bottom: '9%', left: '30%', animationDelay: '1s' }} />
+      <div className="kd kd-spin" style={{ bottom: '5%', left: '40%', animationDuration: '22s' }}><Sparkle fill="#FF5A5A" size={24} /></div>
+    </div>
+  )
+}
+/* ─── Lighter decoration set for lower sections (different from the hero) ─── */
+function FinaleDecor() {
+  return (
+    <div className="kids-decor" aria-hidden style={{ zIndex: 1 }}>
+      <div className="kd kd-cloud kd-drift" style={{ width: 124, height: 46, top: '10%', left: '7%' }} />
+      <div className="kd kd-cloud kd-drift" style={{ width: 92, height: 34, top: '16%', right: '9%', animationDelay: '-6s', animationDuration: '20s' }} />
+      <div className="kd kd-twinkle" style={{ top: '22%', left: '22%' }}><Star fill="#FFC23C" size={30} /></div>
+      <div className="kd kd-twinkle" style={{ bottom: '26%', right: '18%', animationDelay: '1s' }}><Star fill="#FF6FB5" size={26} /></div>
+      <div className="kd kd-spin" style={{ top: '30%', right: '26%' }}><Sparkle fill="#3FA9F5" size={28} /></div>
+      <Balloon color="#57C84D" size={42} style={{ bottom: '6%', left: '6%' }} />
+      <Balloon color="#A368E8" size={34} style={{ top: '14%', right: '34%', animationDelay: '-2.5s' }} />
+    </div>
+  )
+}
+/* ─── Kids wavy section divider ─── */
+function KidsWave({ color = '#FF8C00', flip = false }: { color?: string; flip?: boolean }) {
+  return (
+    <div className="kids-wave" style={flip ? { transform: 'scaleY(-1)' } : undefined} aria-hidden>
+      <svg viewBox="0 0 1200 48" preserveAspectRatio="none">
+        <path d="M0,30 C120,8 240,8 360,26 C480,44 600,44 720,26 C840,8 960,8 1080,26 C1140,35 1170,36 1200,30 L1200,48 L0,48 Z" fill={color} />
+      </svg>
+    </div>
   )
 }
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const { theme } = useTheme()
+  const isKids = theme === 'kids'
 
   return (
     <div>
       {/* ============ NAV ============ */}
-      <nav className="nav">
-        <div className="nav-inner">
-          <Link href="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
-            <Image src="/assets/foalandpony_wordmark.png" alt="Foal & Pony" width={160} height={42} priority />
-          </Link>
-          <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
-            {/* <li><Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link></li> */}
-            <li><Link href="/collections" onClick={() => setMenuOpen(false)}>Collections</Link></li>
-            {/* <li><Link href="/fit" onClick={() => setMenuOpen(false)}>Find your fit</Link></li> */}
-          </ul>
-          <div className="nav-actions">
-            {/* <Link href="/cart" className="nav-cart" aria-label="Cart"><Icon name="cart" size={20} /> Cart</Link> */}
-            <button
-              className="nav-burger"
-              onClick={() => setMenuOpen(v => !v)}
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? '✕' : '☰'}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* ============ HERO ============ */}
       <header className="hero">
         <div className="hero-orb-1" aria-hidden />
         <div className="hero-orb-2" aria-hidden />
+        {isKids && <KidsDecor />}
         <div className="container hero-grid">
           <div className="hero-copy">
             <h1>
@@ -276,95 +309,181 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero-visual hero-visual-cutout">
-            <Image
-              src="/assets/photos/kid-jumping-cutout.png"
-              alt="Kid mid-jump wearing Foal & Pony glasses"
-              fill
-              priority
-              className="hero-photo hero-photo-cutout"
-              sizes="(max-width: 1100px) 90vw, 540px"
-            />
-            <Image
-              src="/assets/foal.png"
-              alt=""
-              width={240}
-              height={240}
-              className="hero-mascot-float hero-mascot-foal"
-              priority
-            />
-            <Image
-              src="/assets/pony.png"
-              alt=""
-              width={260}
-              height={260}
-              className="hero-mascot-float hero-mascot-pony"
-              priority
-            />
-          </div>
+          {isKids ? (
+            <div className="hero-kids-cast">
+              <div className="hkc-grass-band" aria-hidden>
+                <Image src="/images/grass.png" alt="" width={2508} height={627} priority className="hkc-grass-img" />
+                <Image src="/images/grass.png" alt="" width={2508} height={627} priority className="hkc-grass-img hkc-grass-flip" />
+              </div>
+              <Image
+                src="/assets/photos/kid-jumping-cutout.png"
+                alt="Girl mid-jump wearing Foal & Pony glasses"
+                width={955}
+                height={1186}
+                priority
+                className="hkc-kid hkc-girl"
+              />
+              <Image
+                src="/assets/photos/boy-jumping.png"
+                alt="Boy mid-jump wearing Foal & Pony glasses"
+                width={1086}
+                height={1448}
+                priority
+                className="hkc-kid hkc-boy"
+              />
+              <Image
+                src="/images/logo/foal-flip.png"
+                alt=""
+                width={859}
+                height={907}
+                priority
+                className="hkc-mascot hkc-foal"
+              />
+              <Image
+                src="/images/logo/pony-flip.png"
+                alt=""
+                width={895}
+                height={977}
+                priority
+                className="hkc-mascot hkc-pony"
+              />
+            </div>
+          ) : (
+            <div className="hero-visual hero-visual-cutout">
+              <Image
+                src="/assets/photos/kid-jumping-cutout.png"
+                alt="Kid mid-jump wearing Foal & Pony glasses"
+                fill
+                priority
+                className="hero-photo hero-photo-cutout"
+                sizes="(max-width: 1100px) 90vw, 540px"
+              />
+              <Image
+                src="/images/logo/foal-jump.png"
+                alt=""
+                width={240}
+                height={240}
+                className="hero-mascot-float hero-mascot-foal"
+                priority
+              />
+              <Image
+                src="/images/logo/pony.png"
+                alt=""
+                width={260}
+                height={260}
+                className="hero-mascot-float hero-mascot-pony"
+                priority
+              />
+            </div>
+          )}
         </div>
       </header>
 
-      {/* ============ TRUST BAR ============ */}
-      <section className="trust">
-        <div className="container trust-row">
-          <div className="trust-item">
-            <span className="trust-ic"><Icon name="drop" /></span>
-            <div>
-              <div className="trust-num">2 m</div>
-              <div className="trust-lbl">Drop-tested onto concrete</div>
-            </div>
-          </div>
-          <div className="trust-item">
-            <span className="trust-ic"><Icon name="refresh" /></span>
-            <div>
-              <div className="trust-num">10,000×</div>
-              <div className="trust-lbl">Hinge bend cycles</div>
-            </div>
-          </div>
-          <div className="trust-item">
-            <span className="trust-ic"><Icon name="weight" /></span>
-            <div>
-              <div className="trust-num">12 g</div>
-              <div className="trust-lbl">Barely-there weight</div>
-            </div>
-          </div>
-          <div className="trust-item">
-            <span className="trust-ic"><Icon name="badge" /></span>
-            <div>
-              <div className="trust-num">19</div>
-              <div className="trust-lbl">Models · 100+ colours</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {isKids && <KidsWave color="#FFF3DF" />}
 
-      {/* ============ FEATURE SPOTLIGHT ============ */}
-      <section className="section" id="why">
-        <div className="container">
-          <div className="s-head">
-            <div>
-              <span className="eyebrow">Why parents love us.</span>
-              <h2>
-                Built different,<br /> because <em>kids are.</em>
-              </h2>
-            </div>
-            <p>
-              We obsessed over every gram, hinge, colour and comfort so you get one thing:
-              frames that keep up, and stay on, all day long.
-            </p>
-          </div>
-          <div className="features-grid">
-            {features.map((f, i) => (
-              <div key={i} className="feat">
-                <span className="feat-num">{f.num}</span>
-                <h3>{f.title}</h3>
-                <p>{f.body}</p>
+      {/* ============ TRUST BAR, Premium only ============ */}
+      {theme === 'premium' && (
+        <section className="trust">
+          <div className="container trust-row">
+            <div className="trust-item">
+              <span className="trust-ic"><Icon name="drop" /></span>
+              <div>
+                <div className="trust-num">2 m</div>
+                <div className="trust-lbl">Drop-tested onto concrete</div>
               </div>
-            ))}
+            </div>
+            <div className="trust-item">
+              <span className="trust-ic"><Icon name="refresh" /></span>
+              <div>
+                <div className="trust-num">10,000×</div>
+                <div className="trust-lbl">Hinge bend cycles</div>
+              </div>
+            </div>
+            <div className="trust-item">
+              <span className="trust-ic"><Icon name="weight" /></span>
+              <div>
+                <div className="trust-num">12 g</div>
+                <div className="trust-lbl">Barely-there weight</div>
+              </div>
+            </div>
+            <div className="trust-item">
+              <span className="trust-ic"><Icon name="badge" /></span>
+              <div>
+                <div className="trust-num">19</div>
+                <div className="trust-lbl">Models · 100+ colours</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* ============ PLAY BREAK, Kids only (playful hook right under hero) ============ */}
+      {theme === 'kids' && (
+        <section className="section" id="play-cta">
+          <div className="container">
+            <div className="play-card">
+              <div className="play-blob play-blob-1" aria-hidden />
+              <div className="play-blob play-blob-2" aria-hidden />
+              <div className="play-blob play-blob-3" aria-hidden />
+              <div className="play-card-text">
+                <span className="eyebrow">Pssst, over here!</span>
+                <h2>
+                  Glasses on? <em>Game on.</em>
+                </h2>
+                <p>
+                  Take a play break with Brick Breaker, 25 levels of bright, bouncy,
+                  brick-smashing fun. No sign-up. Just play.
+                </p>
+                <div className="hero-ctas">
+                  <Link href="/games" className="btn btn-primary">
+                    Play &amp; win <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+                  </Link>
+                </div>
+              </div>
+              <div className="play-card-art">
+                <div className="bb-preview" aria-hidden>
+                  <div className="bb-bricks">
+                    <div className="bb-row"><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /></div>
+                    <div className="bb-row"><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /></div>
+                    <div className="bb-row"><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /></div>
+                  </div>
+                  <span className="bb-ball" />
+                  <span className="bb-paddle" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ============ FEATURE SPOTLIGHT, Premium only ============ */}
+      {theme === 'premium' && (
+        <section className="section" id="why">
+          <div className="container">
+            <div className="s-head">
+              <div>
+                <span className="eyebrow">Why parents love us.</span>
+                <h2>
+                  Built different,<br /> because <em>kids are.</em>
+                </h2>
+              </div>
+              <p>
+                We obsessed over every gram, hinge, colour and comfort so you get one thing:
+                frames that keep up, and stay on, all day long.
+              </p>
+            </div>
+            <div className="features-grid">
+              {features.map((f, i) => (
+                <div key={i} className="feat">
+                  <span className="feat-num">{f.num}</span>
+                  <h3>{f.title}</h3>
+                  <p>{f.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ============ TORTURE TEST ============ */}
       <section className="torture">
@@ -426,7 +545,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ FIND YOUR FIT — hidden until launch ============
+      {/* ============ FIND YOUR FIT, hidden until launch ============
       <section className="section fit" id="fit">
         <div className="container">
           <div className="fit-card">
@@ -466,6 +585,40 @@ export default function Home() {
       </section>
       */}
 
+      {/* ============ FEATHERLIGHT, 12 g weight ============ */}
+      <section className="section fit" id="weight">
+        <div className="container">
+          <div className="fit-card">
+            <div className="fit-text">
+              <span className="eyebrow">Barely there.</span>
+              <h2>
+                Just <em>12 grams</em> on their nose.
+              </h2>
+              <p>
+                Around 12 grams of flexible TR-90, so light your kid forgets they&apos;re
+                wearing them, which means they actually keep them on, all day long.
+              </p>
+              <Link href="/collections" className="btn btn-primary">
+                See the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+              </Link>
+            </div>
+            <div className="fit-img">
+              <Image
+                src="/assets/photos/scale-12g.png"
+                alt="Foal & Pony ultra-light child frames on a scale showing 12 grams"
+                fill
+                sizes="(max-width: 1100px) 90vw, 540px"
+                style={{ objectFit: 'cover' }}
+              />
+              <div className="fit-chip">
+                <span className="lbl">FRAME WEIGHT</span>
+                <span className="val">12 grams</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ============ SOCIAL PROOF ============ */}
       <section className="section proof">
         <div className="container">
@@ -497,7 +650,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ SCHOOLS / B2B ============ */}
+      {/* ============ SCHOOLS / B2B, hidden until launch ============
       <section className="section" id="schools">
         <div className="container">
           <div className="schools-card">
@@ -536,12 +689,47 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
+
+      {/* ============ PARTNER BANNER, shown in both themes ============ */}
+      <section className="section" id="partner-cta">
+        <div className="container">
+          <div className="schools-card">
+            <div>
+              <span className="eyebrow">Let&apos;s work together.</span>
+              <h2>
+                Let&apos;s build something <em>together.</em>
+              </h2>
+              <p>
+                Bulk pricing. Priority support. Large-volume orders handled end to end,
+                with frames built to survive real childhoods.
+              </p>
+              <div className="schools-ctas">
+                <Link href="/partner" className="btn btn-primary">
+                  Partner with us <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+                </Link>
+              </div>
+            </div>
+            <div className="schools-mini">
+              <div className="schools-mini-row">
+                <strong>Built to outlast budgets</strong>
+                <span>Lower replacement rates and volume-friendly pricing keep costs predictable, year after year.</span>
+              </div>
+              <div className="schools-mini-row">
+                <strong>Standards &amp; compliance</strong>
+                <span>Impact-tested, UV-rated and certified to children&apos;s safety standards. Documentation included.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ============ FINAL CTA ============ */}
       <section className="finale">
+        {isKids && <FinaleDecor />}
         <div className="container">
           <Image
-            src="/assets/foal.png"
+            src="/images/logo/foal-jump.png"
             alt=""
             width={180}
             height={180}
@@ -595,7 +783,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            {/* footer Shop column — hidden until launch
+            {/* footer Shop column, hidden until launch
             <div className="footer-col">
               <h4>Shop</h4>
               <ul>
@@ -610,6 +798,8 @@ export default function Home() {
               <h4>Explore</h4>
               <ul>
                 <li><Link href="/collections">Collections</Link></li>
+                <li><Link href="/blog">Blog</Link></li>
+                <li><Link href="/games">Games</Link></li>
               </ul>
             </div>
             <div className="footer-col">
@@ -618,22 +808,24 @@ export default function Home() {
                 {/* <li><Link href="/fit">Find your fit</Link></li> */}
                 <li><Link href="/policies/care">Care guide</Link></li>
                 <li><Link href="/policies/shipping">Shipping &amp; returns</Link></li>
-                <li><Link href="/contact">Contact us</Link></li>
+                <li><Link href="/partner">Partner with us</Link></li>
               </ul>
             </div>
             <div className="footer-col">
               <h4>Company</h4>
               <ul>
                 <li><a href="#why">Why Foal &amp; Pony</a></li>
-                <li><a href="#schools">For schools &amp; clinics</a></li>
+                <li><Link href="/partner">Partner with us</Link></li>
                 <li><Link href="/about">Our story</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
               </ul>
             </div>
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getFullYear()} Foal &amp; Pony. All rights reserved.</span>
-            <span>A brand by <strong>Stallion Eyewear</strong> · BUILT BY GARIHC</span>
+            <span>
+              A brand by <strong>Stallion Eyewear</strong> · BUILT BY{' '}
+              <a href="https://garihc.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--orange-warm)', fontWeight: 700 }}>GARIHC</a>
+            </span>
           </div>
         </div>
       </footer>

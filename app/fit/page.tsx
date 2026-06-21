@@ -1,11 +1,11 @@
-// fit page hidden until launch — use server redirect
+// fit page hidden until launch, use server redirect
 import { redirect } from 'next/navigation'
 
 export default function FitPage() {
   redirect('/')
 }
 
-/* original client component below — restore when ready
+/* original client component below, restore when ready
 
 'use client'
 

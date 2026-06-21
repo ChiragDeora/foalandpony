@@ -25,4 +25,4 @@ create index if not exists order_items_order_id_idx on public.order_items (order
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 -- No select/insert policies: only the service-role admin client (server-side,
--- bypasses RLS) reads or writes these tables — matches the user_profiles pattern.
+-- bypasses RLS) reads or writes these tables, matches the user_profiles pattern.

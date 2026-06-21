@@ -10,7 +10,7 @@ Single host, single deploy. Storefront and admin live on the same Vercel project
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-- **Vercel** hosts everything — public site + embedded Sanity Studio at `/studio`.
+- **Vercel** hosts everything, public site + embedded Sanity Studio at `/studio`.
 - **Sanity** is the CMS the company team logs into to add products. It hosts
   the product data and images on their CDN.
 - **Clerk** handles customer login on the storefront. Optional at launch.
@@ -18,7 +18,7 @@ Single host, single deploy. Storefront and admin live on the same Vercel project
 
 ---
 
-## Step 1 — Create the Sanity project (5 min)
+## Step 1, Create the Sanity project (5 min)
 
 1. Go to https://www.sanity.io and sign up (Google login works).
 2. **Create new project** → name it "Foal & Pony" → pick the **production**
@@ -37,7 +37,7 @@ Single host, single deploy. Storefront and admin live on the same Vercel project
 
 ---
 
-## Step 2 — Push the repo to GitHub
+## Step 2, Push the repo to GitHub
 
 ```bash
 git add .
@@ -50,13 +50,13 @@ git push
 
 ---
 
-## Step 3 — Deploy to Vercel
+## Step 3, Deploy to Vercel
 
 You said the domain is already attached. So:
 
 1. Vercel dashboard → **New Project** → import the GitHub repo.
 2. Framework: **Next.js** (auto-detected).
-3. **Environment Variables** — paste:
+3. **Environment Variables**, paste:
 
    | Key | Value |
    |---|---|
@@ -75,7 +75,7 @@ You said the domain is already attached. So:
 
 ---
 
-## Step 4 — Add the admin subdomain on Vercel
+## Step 4, Add the admin subdomain on Vercel
 
 1. Vercel → project → **Domains** → **Add**.
 2. Enter `admin.foalandpony.com`.
@@ -88,7 +88,7 @@ shows `admin.foalandpony.com` and nothing else.
 
 ---
 
-## Step 5 — Test it end-to-end
+## Step 5, Test it end-to-end
 
 1. Visit `https://admin.foalandpony.com`. You should see the Sanity Studio
    sign-in screen.
@@ -106,7 +106,7 @@ shows `admin.foalandpony.com` and nothing else.
 
 ---
 
-## Step 6 — Hand over to the company team
+## Step 6, Hand over to the company team
 
 Send them:
 - **URL**: `https://admin.foalandpony.com`
@@ -155,9 +155,9 @@ The free tiers comfortably fit a 19-product brand site for years.
 
 ### When to upgrade
 
-- **Sanity Growth** ($15/mo) — when you exceed 3 team members.
-- **Clerk Pro** ($25/mo) — when team SSO matters.
-- **Vercel Pro** ($20/mo) — for team collaboration / analytics.
+- **Sanity Growth** ($15/mo), when you exceed 3 team members.
+- **Clerk Pro** ($25/mo), when team SSO matters.
+- **Vercel Pro** ($20/mo), for team collaboration / analytics.
 
 ---
 
@@ -173,17 +173,17 @@ script that reads the data and creates the documents via the Sanity API.
 
 **`/shop` shows the empty state even after publishing a product.**
 - Confirm the product has **Published** ticked (not just saved as a draft).
-- Wait ~60s — Next.js revalidates the GROQ cache on that interval.
+- Wait ~60s, Next.js revalidates the GROQ cache on that interval.
 - Confirm `NEXT_PUBLIC_SANITY_PROJECT_ID` is set in Vercel and the
   deployment has been redeployed since the env var was added.
 
 **admin.foalandpony.com loads the storefront, not the Studio.**
 - The `ADMIN_HOST` env var on Vercel must exactly match the subdomain (case-sensitive).
-- Rewrites are baked at build time — redeploy after changing env vars.
+- Rewrites are baked at build time, redeploy after changing env vars.
 
 **Sanity Studio errors out with "missing CORS origin".**
 - Add the storefront and admin URLs in sanity.io/manage → API → CORS Origins.
 
 **Image upload fails in Studio with "asset upload error".**
-- Sanity hosts images on their own CDN — no extra storage to set up. If it
+- Sanity hosts images on their own CDN, no extra storage to set up. If it
   fails, check your project's quota in sanity.io/manage (free tier is 5GB).

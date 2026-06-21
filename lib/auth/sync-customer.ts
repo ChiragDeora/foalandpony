@@ -14,7 +14,7 @@ export type SyncCustomerResult = {
 /**
  * After Clerk sign-in: persist a user_profiles row in Supabase.
  *
- * Customer/order data is not stored anywhere transactional yet — the site is
+ * Customer/order data is not stored anywhere transactional yet, the site is
  * brand-presence + product info, with enquiries routed through WhatsApp.
  * When checkout goes live, extend this function to also create the customer
  * record in whatever commerce engine we wire up at that point.
