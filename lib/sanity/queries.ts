@@ -17,10 +17,12 @@ const PRODUCT_FIELDS = /* groq */ `
     name,
     hex,
     "image": image,
+    "imageAspect": image.asset->metadata.dimensions.aspectRatio,
   },
   "lifestyleImages": lifestyleImages[]{
     ...,
-    "filename": asset->originalFilename
+    "filename": asset->originalFilename,
+    "aspectRatio": asset->metadata.dimensions.aspectRatio
   },
 `
 

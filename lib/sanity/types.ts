@@ -14,10 +14,12 @@ export type ProductColour = {
   name: string
   hex: string
   image?: SanityImageRef | null
+  imageAspect?: number | null
 }
 
 export type LifestyleImage = SanityImageRef & {
   filename?: string | null
+  aspectRatio?: number | null
 }
 
 export type FoalProduct = {

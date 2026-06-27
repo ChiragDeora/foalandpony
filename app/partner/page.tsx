@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
+import { SectionDecor } from '@/components/Decor'
 
 /* BULK ORDER REMOVED, disabled pre-launch */
 /* CLINIC FORM REMOVED, disabled pre-launch */
@@ -37,8 +38,7 @@ export default function PartnerPage() {
         </div>
 
         <div className="fp-container relative z-10">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 40, alignItems: 'center' }}
-            className="max-[640px]:grid-cols-1">
+          <div className="fp-partner-hero">
             <div>
               <h1 style={{
                 fontFamily: 'var(--fp-heading-font)',
@@ -62,8 +62,9 @@ export default function PartnerPage() {
       </section>
 
       {/* ── Enquiry form ── */}
-      <section style={{ padding: '80px 0 96px', background: '#F5F3ED' }}>
-        <div className="fp-container" style={{ maxWidth: 680 }}>
+      <section style={{ padding: '80px 0 96px', background: '#F5F3ED', position: 'relative', overflow: 'hidden' }}>
+        <SectionDecor variant={0} />
+        <div className="fp-container" style={{ maxWidth: 680, position: 'relative', zIndex: 2 }}>
           {sent ? (
             <div style={{ textAlign: 'center', padding: '64px 32px' }}>
               <div style={{ width: 64, height: 64, borderRadius: 16, background: '#4CAF50', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>

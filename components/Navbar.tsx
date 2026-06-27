@@ -3,49 +3,35 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useTheme } from '@/context/ThemeContext'
-
-function ThemeToggle({ inDrawer = false }: { inDrawer?: boolean }) {
-  const { theme, toggleTheme } = useTheme()
-  const isKids = theme === 'kids'
-
-  return (
-    <button
-      onClick={toggleTheme}
-      className={`fp-theme-toggle ${inDrawer ? 'w-full justify-center' : ''}`}
-      aria-label={`Switch to ${isKids ? 'premium' : 'kids'} theme`}
-      title={`Switch to ${isKids ? 'Premium' : 'Kids'} theme`}
-    >
-      {/* Kids pill */}
-      <span className={`fp-toggle-pill ${isKids ? 'active-kids' : 'inactive'}`}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
-        Kids
-      </span>
-      {/* Premium pill */}
-      <span className={`fp-toggle-pill ${!isKids ? 'active-premium' : 'inactive'}`}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M3 11l5-8 4 6 3-4 5 6H3z" />
-          <path d="M3 11v8a1 1 0 001 1h16a1 1 0 001-1v-8" />
-        </svg>
-        Premium
-      </span>
-    </button>
-  )
-}
 
 const NAV_LINKS = [
   { href: '/shop', label: 'Shop' },
   { href: '/collections', label: 'Collections' },
+  { href: '/#care', label: 'Kids Eye Care' },
   { href: '/blog', label: 'Blog' },
-  { href: '/games', label: 'Games' },
   { href: '/partner', label: 'Partner with us' },
 ]
 
+function KidsZoneButton({ inDrawer = false }: { inDrawer?: boolean }) {
+  return (
+    <Link
+      href="/games"
+      className={`fp-kidszone-btn${inDrawer ? ' fp-kidszone-btn-drawer' : ''}`}
+      aria-label="Kids Zone — games"
+    >
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M7 8.5h10a4.2 4.2 0 0 1 4 4.4 3 3 0 0 1-5.4 1.8l-.5-.7H8.9l-.5.7A3 3 0 0 1 3 12.9a4.2 4.2 0 0 1 4-4.4z" />
+        <path d="M7 11.5v2.4M5.8 12.7h2.4" />
+        <circle cx="16.2" cy="12" r=".9" fill="currentColor" />
+        <circle cx="18" cy="13.6" r=".9" fill="currentColor" />
+      </svg>
+      Kids Zone
+    </Link>
+  )
+}
+
 export function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const { theme } = useTheme()
 
   useEffect(() => {
     if (drawerOpen) {
@@ -56,11 +42,8 @@ export function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [drawerOpen])
 
-  const isPremium = theme === 'premium'
-  // Each wordmark has a different aspect ratio, set intrinsic dims to match so neither distorts.
-  const logo = isPremium
-    ? { src: '/images/logo/navy-wordmark.png', w: 1174, h: 745, h_px: 40 }
-    : { src: '/images/logo/rainbow-wordmark.png', w: 637, h: 154, h_px: 46 }
+  // Original navy wordmark, single unified look.
+  const logo = { src: '/images/logo/navy-wordmark.png', w: 1174, h: 745, h_px: 40 }
 
   return (
     <>
@@ -90,13 +73,7 @@ export function Navbar() {
           {/* Desktop right actions */}
           <div className="fp-nav-actions">
             {/* CART DISABLED - enable post launch */}
-            {/* <Link href="/cart" className="fp-nav-link" aria-label="Cart">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="9" cy="20" r="1.5" /><circle cx="17" cy="20" r="1.5" />
-                <path d="M3 4h2l2.4 11.5a2 2 0 002 1.5h7.6a2 2 0 002-1.6L20 8H6" />
-              </svg>
-            </Link> */}
-            <ThemeToggle />
+            <KidsZoneButton />
             {/* Hamburger */}
             <button
               className="fp-nav-burger"
@@ -120,11 +97,11 @@ export function Navbar() {
           <div className="fp-drawer fp-drawer-open" style={{ display: 'flex' }}>
             <div className="fp-drawer-header">
               <Image
-                src="/images/logo/rainbow-wordmark.png"
+                src="/images/logo/navy-wordmark.png"
                 alt="Foal & Pony"
-                width={637}
-                height={154}
-                style={{ height: 38, width: 'auto' }}
+                width={1174}
+                height={745}
+                style={{ height: 34, width: 'auto' }}
               />
               <button className="fp-drawer-close" onClick={() => setDrawerOpen(false)} aria-label="Close menu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -146,8 +123,8 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="fp-drawer-toggle-wrap">
-              <ThemeToggle inDrawer />
+            <div className="fp-drawer-toggle-wrap" onClick={() => setDrawerOpen(false)}>
+              <KidsZoneButton inDrawer />
             </div>
           </div>
         </>

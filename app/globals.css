@@ -238,19 +238,20 @@ img { display: block; max-width: 100%; }
 .hero-orb-1, .hero-orb-2 {
   position: absolute;
   border-radius: 999px;
-  filter: blur(8px);
+  filter: blur(6px);
   z-index: 0;
   pointer-events: none;
 }
+/* Bigger, bolder orange + blue circles behind the hero */
 .hero-orb-1 {
-  width: 540px; height: 540px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,179,71,.35), rgba(255,179,71,0));
-  top: -180px; right: -160px;
+  width: 860px; height: 860px;
+  background: radial-gradient(circle at 32% 32%, rgba(255,140,0,.72), rgba(255,140,0,.22) 52%, rgba(255,140,0,0) 72%);
+  top: -250px; right: -220px;
 }
 .hero-orb-2 {
-  width: 420px; height: 420px;
-  background: radial-gradient(circle at 70% 50%, rgba(93,173,226,.32), rgba(93,173,226,0));
-  bottom: -120px; left: -100px;
+  width: 740px; height: 740px;
+  background: radial-gradient(circle at 68% 48%, rgba(63,169,245,.68), rgba(63,169,245,.22) 52%, rgba(63,169,245,0) 72%);
+  bottom: -210px; left: -190px;
 }
 .hero-grid {
   position: relative;
@@ -2468,14 +2469,18 @@ img { display: block; max-width: 100%; }
   margin-top: auto;
 }
 
-/* Show drawer on mobile */
-@media (max-width: 768px) {
+/* Show drawer on tablet + mobile (5 links + Kids Zone button need room) */
+@media (max-width: 920px) {
   .fp-nav-links { display: none; }
   .fp-nav-burger { display: flex; }
   .fp-drawer-open-state .fp-drawer-overlay,
   .fp-drawer-open-state .fp-drawer {
     display: flex;
   }
+}
+@media (max-width: 420px) {
+  /* keep the Kids Zone pill from crowding the burger on small phones */
+  .fp-kidszone-btn { font-size: 13px; padding: 8px 12px; }
 }
 
 /* ============================================ */
@@ -3017,10 +3022,22 @@ img { display: block; max-width: 100%; }
 [data-theme='kids'] .s-head h2,
 [data-theme='kids'] .finale h2,
 [data-theme='kids'] .play-card-text h2,
-[data-theme='kids'] .torture h2 {
+[data-theme='kids'] .torture h2,
+[data-theme='kids'] .fp-collections-head h2,
+[data-theme='kids'] .fp-care-head h2,
+[data-theme='kids'] .fp-smiles-head h2,
+[data-theme='kids'] .fp-story-text h2 {
   font-family: 'Fredoka', 'Baloo 2', 'Nunito', sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
+}
+/* Sub-labels + card titles in the new sections also use the rounded family */
+[data-theme='kids'] .fp-coll-name,
+[data-theme='kids'] .fp-care-card h3,
+[data-theme='kids'] .fp-strip-item strong,
+[data-theme='kids'] .fp-smile figcaption strong {
+  font-family: 'Fredoka', 'Baloo 2', 'Nunito', sans-serif !important;
+  font-weight: 700 !important;
 }
 [data-theme='kids'] .hero h1 { line-height: 1.04; color: #1E88E5; }  /* foal blue */
 [data-theme='kids'] .hero h1 .squiggle { font-style: normal; font-weight: 700; color: var(--orange); }
@@ -3089,7 +3106,7 @@ img { display: block; max-width: 100%; }
 
 /* ---- Candy section tints + rounded tops ---- */
 [data-theme='kids'] .trust { background: #FFF3DF; border-top: 0; border-bottom: 0; }
-[data-theme='kids'] .proof { background: #FFF0F7; }
+[data-theme='kids'] .proof { background: linear-gradient(180deg, #FFF8EE 0%, #FFF0F7 14%, #FFF0F7 86%, #FFF8EE 100%); }
 [data-theme='kids'] .finale { background: linear-gradient(180deg, #FFF7E6 0%, #FFE2C0 100%); }
 [data-theme='kids'] .finale > .container { position: relative; z-index: 2; }
 [data-theme='kids'] .trust-num,
@@ -3113,7 +3130,21 @@ img { display: block; max-width: 100%; }
 }
 [data-theme='kids'] .hero > .container { width: 100%; max-width: 1340px; }
 /* balanced: text keeps room, right column still a bit bigger for the scene */
-[data-theme='kids'] .hero-grid { grid-template-columns: 1.12fr 1.18fr; gap: 30px; }
+[data-theme='kids'] .hero-grid { grid-template-columns: 1fr 1.28fr; gap: 28px; align-items: center; }
+/* Square frame so the kids fill it without dead space on top */
+[data-theme='kids'] .hero-visual-cutout { aspect-ratio: 1 / 1; }
+/* Feather the hero bottom into the page — the orbs/decor fade into cream
+   instead of being clipped in a hard horizontal line. Content (z-index 2)
+   stays above this, so the kids photo is untouched. */
+[data-theme='kids'] .hero::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 170px;
+  background: linear-gradient(to bottom, rgba(255, 248, 238, 0), var(--cream) 92%);
+  z-index: 1;
+  pointer-events: none;
+}
 @media (max-width: 1100px) {
   [data-theme='kids'] .hero { min-height: auto; display: block; }
   [data-theme='kids'] .hero-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -3214,9 +3245,9 @@ img { display: block; max-width: 100%; }
 /* confetti twinkles slowly */
 .kd-twinkle-slow { animation: kd-twinkle 5.5s ease-in-out infinite; }
 
-/* Orbs (the soft circles), a little less transparent in kids */
-[data-theme='kids'] .hero-orb-1 { background: radial-gradient(circle at 30% 30%, rgba(255,179,71,.58), rgba(255,179,71,0)); }
-[data-theme='kids'] .hero-orb-2 { background: radial-gradient(circle at 70% 50%, rgba(93,173,226,.52), rgba(93,173,226,0)); }
+/* Orbs (the soft circles), bold + prominent in kids */
+[data-theme='kids'] .hero-orb-1 { background: radial-gradient(circle at 32% 32%, rgba(255,140,0,.8), rgba(255,140,0,.26) 52%, rgba(255,140,0,0) 72%); }
+[data-theme='kids'] .hero-orb-2 { background: radial-gradient(circle at 68% 48%, rgba(63,169,245,.76), rgba(63,169,245,.26) 52%, rgba(63,169,245,0) 72%); }
 
 /* ============ WAVY SECTION DIVIDER (kids only) ============ */
 .kids-wave { display: block; width: 100%; height: 48px; line-height: 0; }
@@ -3226,5 +3257,237 @@ img { display: block; max-width: 100%; }
 /* Premium never shows the playful waves/decor */
 [data-theme='premium'] .kids-decor,
 [data-theme='premium'] .kids-wave { display: none !important; }
+
+
+/* =====================================================================
+   UNIFIED PREMIUM-YET-PLAYFUL SECTIONS
+   (trust strip, collections, eye care, our story, smiles, kids-zone btn)
+   ===================================================================== */
+
+/* Shared playful section kicker + highlight */
+.fp-kicker {
+  display: inline-block;
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.fp-hl { background-image: linear-gradient(transparent 56%, var(--fp-hlc, #FFDD55) 56%); padding: 0 .08em; border-radius: 2px; }
+.fp-hl-yellow { --fp-hlc: #FFD45A; }
+.fp-hl-pink   { --fp-hlc: #FFB3D2; }
+.fp-hl-blue   { --fp-hlc: #A9D8F5; }
+
+/* ---- Trust strip (after hero) ---- */
+.fp-strip-wrap { padding: 30px 0 14px; position: relative; z-index: 5; }
+.fp-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: #fff;
+  border-radius: 26px;
+  padding: 24px 16px;
+  box-shadow: 0 18px 44px -26px rgba(31,58,92,.24);
+  border: 1px solid var(--line);
+}
+.fp-strip-item { display: flex; align-items: center; gap: 14px; padding: 6px 18px; }
+.fp-strip-item + .fp-strip-item { border-left: 1px solid var(--line); }
+.fp-strip-ic {
+  flex: none;
+  width: 50px; height: 50px;
+  border-radius: 15px;
+  display: grid; place-items: center;
+  background: var(--orange-soft, #FFEBCC);
+  color: var(--orange);
+}
+.fp-strip-item strong { display: block; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 17px; color: var(--navy); line-height: 1.1; }
+.fp-strip-item span { font-size: 13px; color: var(--ink-3); }
+
+/* ---- Choose your collection ---- */
+.fp-collections { background: linear-gradient(180deg, #FFF8EE 0%, #E9F3FB 14%, #E9F3FB 86%, #FFF8EE 100%); }
+.fp-collections-head { text-align: center; max-width: 640px; margin: 0 auto 44px; }
+.fp-collections-head h2,
+.fp-care-head h2,
+.fp-smiles-head h2,
+.fp-story-text h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(30px, 4.4vw, 50px);
+  color: var(--navy);
+  margin: 0 0 12px;
+  line-height: 1.02;
+}
+.fp-collections-head p { color: var(--ink-2); font-size: 17px; margin: 0; }
+.fp-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 18px;
+}
+.fp-coll-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: transform .22s ease;
+}
+.fp-coll-card:hover { transform: translateY(-8px); }
+/* Visual holds both the gem (default) and the specs (on hover) */
+.fp-coll-visual { position: relative; width: 96px; height: 96px; }
+.fp-coll-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--c) 70%, white), var(--c) 70%);
+  box-shadow: 0 14px 28px -10px var(--c), inset 0 -8px 16px rgba(0,0,0,.12);
+  transition: opacity .28s ease, transform .28s ease;
+}
+.fp-coll-circle::after {
+  content: '';
+  position: absolute;
+  top: 16%; left: 20%;
+  width: 30%; height: 24%;
+  border-radius: 50%;
+  background: rgba(255,255,255,.55);
+  filter: blur(2px);
+}
+/* Specs (glasses) — hidden until hover */
+.fp-coll-specs {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 14%, #fff);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--c) 38%, #fff);
+  opacity: 0;
+  transform: scale(.82) rotate(-6deg);
+  transition: opacity .28s ease, transform .28s ease;
+}
+.fp-coll-specs svg { width: 64%; height: auto; }
+/* swap on hover: gem out, specs in */
+.fp-coll-card:hover .fp-coll-circle { opacity: 0; transform: scale(.78); }
+.fp-coll-card:hover .fp-coll-specs { opacity: 1; transform: scale(1) rotate(0deg); }
+.fp-coll-name { font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 18px; color: var(--navy); margin-top: 12px; }
+.fp-coll-tag { font-size: 13px; color: var(--ink-3); }
+.fp-collections-cta { display: flex; justify-content: center; margin-top: 40px; }
+
+/* ---- Kids eye care ---- */
+.fp-care { background: linear-gradient(180deg, #FFF8EE 0%, #E4F0FB 14%, #E4F0FB 86%, #FFF8EE 100%); }
+.fp-care-head { text-align: center; max-width: 600px; margin: 0 auto 40px; }
+.fp-care-head p { color: var(--ink-2); font-size: 17px; margin: 0; }
+.fp-care-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.fp-care-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 30px 26px;
+  box-shadow: 0 14px 36px -22px rgba(31,58,92,.30);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.fp-care-card:hover { transform: translateY(-6px); box-shadow: 0 22px 48px -22px rgba(31,58,92,.34); }
+.fp-care-ic { width: 60px; height: 60px; border-radius: 18px; display: grid; place-items: center; margin-bottom: 16px; }
+.fp-care-card h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 21px; color: var(--navy); margin: 0 0 8px; }
+.fp-care-card p { color: var(--ink-2); font-size: 15.5px; line-height: 1.55; margin: 0; }
+.fp-care-cta { display: flex; justify-content: center; margin-top: 38px; }
+
+/* ---- Our story ---- */
+.fp-story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.fp-story-img { position: relative; aspect-ratio: 4 / 3; border-radius: 28px; overflow: hidden; box-shadow: 0 26px 60px -30px rgba(31,58,92,.34); }
+.fp-story-text p { color: var(--ink-2); font-size: 17px; line-height: 1.6; margin: 0 0 24px; max-width: 460px; }
+
+/* ---- Smiles gallery ---- */
+.fp-smiles { background: linear-gradient(180deg, #FFF8EE 0%, #E9F6EF 14%, #E9F6EF 86%, #FFF8EE 100%); }
+.fp-smiles-head { text-align: center; margin-bottom: 36px; }
+.fp-smiles-track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 10px 4px 18px;
+  scroll-snap-type: x mandatory;
+}
+.fp-smiles-track::-webkit-scrollbar { height: 8px; }
+.fp-smiles-track::-webkit-scrollbar-thumb { background: rgba(31,58,92,.18); border-radius: 999px; }
+.fp-smile { flex: 0 0 auto; width: 228px; scroll-snap-align: start; margin: 0; }
+.fp-smile:nth-child(odd) { transform: rotate(-2deg); }
+.fp-smile:nth-child(even) { transform: rotate(2deg); }
+.fp-smile-img { position: relative; width: 100%; aspect-ratio: 3 / 4; border-radius: 22px; overflow: hidden; background: #fff; box-shadow: 0 16px 36px -20px rgba(31,58,92,.36); border: 5px solid #fff; }
+.fp-smile figcaption { text-align: center; margin-top: 14px; }
+.fp-smile figcaption strong { display: block; font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: var(--navy); font-size: 16px; }
+.fp-smile figcaption span { font-size: 13px; color: var(--ink-3); }
+
+/* ---- Rainbow Kids Zone button (nav) ---- */
+.fp-kidszone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FF6B6B, #FF8A47, #FFC83D, #57C98A, #4DA6FF, #9B6BFF);
+  background-size: 200% 100%;
+  box-shadow: 0 8px 20px -8px rgba(155,107,255,.55);
+  transition: transform .18s ease, background-position .6s ease;
+  white-space: nowrap;
+}
+.fp-kidszone-btn:hover { transform: translateY(-2px); background-position: 100% 0; }
+.fp-kidszone-btn-drawer { width: 100%; justify-content: center; padding: 14px; font-size: 17px; }
+
+/* ---- Responsive ---- */
+@media (max-width: 980px) {
+  .fp-strip { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+  .fp-strip-item:nth-child(3) { border-left: none; }
+  .fp-collections-grid { grid-template-columns: repeat(3, 1fr); gap: 16px 12px; }
+  .fp-care-grid { grid-template-columns: 1fr; }
+  .fp-story-grid { grid-template-columns: 1fr; gap: 30px; }
+  .fp-story-img { order: -1; }
+}
+@media (max-width: 560px) {
+  .fp-strip { grid-template-columns: 1fr; }
+  .fp-strip-item + .fp-strip-item { border-left: none; border-top: 1px solid var(--line); padding-top: 14px; }
+  .fp-collections-grid { grid-template-columns: repeat(2, 1fr); }
+  .fp-coll-visual { width: 80px; height: 80px; }
+}
+
+/* ============ SECTION DECORATIONS (balloons/stars/confetti site-wide) ============ */
+.has-decor { position: relative; overflow: hidden; }
+.has-decor > .container { position: relative; z-index: 1; }
+.section-decor { z-index: 0; }
+/* Premium theme keeps things calm — decor only shows in kids (which is our default) */
+[data-theme='premium'] .section-decor { display: none !important; }
+/* ============ TABLET / MOBILE HARDENING ============ */
+@media (max-width: 768px) {
+  /* No floaty decorations on phones / tablet-portrait — they clutter the narrow
+     layout and land on the text. The soft orange + blue orbs stay as the playful
+     backdrop, so the hero is clean but still on-brand. */
+  [data-theme='kids'] .kids-decor { display: none; }
+  /* shorter hero fade on small screens */
+  [data-theme='kids'] .hero::after { height: 80px; }
+  /* The hero photo is a square with the kids at the bottom (empty space on top).
+     Crop to a landscape frame anchored at the bottom so we see the kids, not the gap. */
+  [data-theme='kids'] .hero-visual-cutout {
+    aspect-ratio: 3 / 2;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  [data-theme='kids'] .hero-photo-cutout { object-fit: cover; object-position: center bottom; }
+}
+@media (max-width: 560px) {
+  .container { padding: 0 18px; }
+  .fp-care-card { padding: 24px 20px; }
+  .fp-story-text p { font-size: 16px; }
+  /* keep the collection gems comfortably tappable, 2-up */
+  .fp-collections-grid { gap: 18px 10px; }
+}
+
+/* Partner / contact hero stacks on small screens (no Tailwind here) */
+.fp-partner-hero { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+@media (max-width: 640px) {
+  .fp-partner-hero { grid-template-columns: 1fr; gap: 24px; }
+}
 
 

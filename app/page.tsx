@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
-import { useTheme } from '@/context/ThemeContext'
+import { Footer } from '@/components/Footer'
+import { SectionDecor } from '@/components/Decor'
 
 
 /* Inline icon set, quirky outline strokes, drawn here so we don't ship a UI lib */
@@ -106,6 +107,14 @@ function Icon({ name, size = 22 }: { name: string; size?: number }) {
           <path d="M5 7c2 0 3-2 3-2s1 2 3 2 3-2 3-2 1 2 3 2 3-2 3-2" />
         </svg>
       )
+    case 'calendar':
+      return (
+        <svg {...common}>
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M3 10h18M8 3v4M16 3v4" />
+          <path d="M8 15l2 2 4-4" />
+        </svg>
+      )
     case 'cart':
       return (
         <svg {...common}>
@@ -142,6 +151,91 @@ function Icon({ name, size = 22 }: { name: string; size?: number }) {
           <path d="M3 7l9 6 9-6" />
         </svg>
       )
+    case 'glasses':
+      return (
+        <svg {...common}>
+          <circle cx="6" cy="13" r="3.6" />
+          <circle cx="18" cy="13" r="3.6" />
+          <path d="M9.5 12.4c1.3-1 3.7-1 5 0" />
+          <path d="M2.6 12l-1.1-1.6M21.4 12l1.1-1.6" />
+        </svg>
+      )
+    case 'bluelight':
+      /* screen-protecting glasses: round specs with little light rays */
+      return (
+        <svg {...common}>
+          <circle cx="6.5" cy="14.5" r="3.4" />
+          <circle cx="17.5" cy="14.5" r="3.4" />
+          <path d="M10 13.8c1-.9 3-.9 4 0" />
+          <path d="M3.1 13.6l-1.6-1.1M20.9 13.6l1.6-1.1" />
+          <path d="M12 3v2.4M8.3 4.4l1 1.7M15.7 4.4l-1 1.7" />
+        </svg>
+      )
+    case 'sunsafe':
+      /* sunglasses with a little sun */
+      return (
+        <svg {...common}>
+          <path d="M3 13h7v1.4a3.5 3.5 0 0 1-7 0z" />
+          <path d="M14 13h7v1.4a3.5 3.5 0 0 1-7 0z" />
+          <path d="M10 13.4c1-.8 3-.8 4 0" />
+          <path d="M12 3.2v2.2M6.4 5.2l1.1 1.3M17.6 5.2l-1.1 1.3" />
+        </svg>
+      )
+    case 'eyecheck':
+      /* eye exam: an eye with a checkmark */
+      return (
+        <svg {...common}>
+          <path d="M2 11.5s3.6-5.4 9-5.4 9 5.4 9 5.4" />
+          <circle cx="11" cy="11.4" r="2.7" />
+          <path d="M14.6 18.4l2 2 4-4.4" />
+        </svg>
+      )
+    case 'controller':
+      return (
+        <svg {...common}>
+          <path d="M7 8.5h10a4.2 4.2 0 0 1 4 4.4 3 3 0 0 1-5.4 1.8l-.5-.7H8.9l-.5.7A3 3 0 0 1 3 12.9a4.2 4.2 0 0 1 4-4.4z" />
+          <path d="M7 11.5v2.4M5.8 12.7h2.4" />
+          <circle cx="16.2" cy="12" r=".9" fill={stroke} />
+          <circle cx="18" cy="13.6" r=".9" fill={stroke} />
+        </svg>
+      )
+    default:
+      return null
+  }
+}
+
+/* Glasses silhouettes, one per frame shape, revealed when a collection gem is hovered */
+function Specs({ shape, color }: { shape: string; color: string }) {
+  const common = {
+    width: 54,
+    height: 30,
+    viewBox: '0 0 80 44',
+    fill: 'none',
+    stroke: color,
+    strokeWidth: 4,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  }
+  const bridge = <path d="M33 20c2-3 12-3 14 0" />
+  const arms = (
+    <>
+      <path d="M6 18 0 14" />
+      <path d="M74 18 80 14" />
+    </>
+  )
+  switch (shape) {
+    case 'round':
+      return <svg {...common}><circle cx="19" cy="22" r="13" /><circle cx="61" cy="22" r="13" />{bridge}{arms}</svg>
+    case 'oval':
+      return <svg {...common}><ellipse cx="19" cy="22" rx="14" ry="11" /><ellipse cx="61" cy="22" rx="14" ry="11" />{bridge}{arms}</svg>
+    case 'square':
+      return <svg {...common}><rect x="6" y="11" width="26" height="22" rx="4" /><rect x="48" y="11" width="26" height="22" rx="4" />{bridge}{arms}</svg>
+    case 'rectangle':
+      return <svg {...common}><rect x="3" y="13" width="30" height="18" rx="4" /><rect x="47" y="13" width="30" height="18" rx="4" />{bridge}{arms}</svg>
+    case 'panto':
+      return <svg {...common}><path d="M6 16c0-3 26-3 26 0 0 12-4 18-13 18S6 28 6 16z" /><path d="M48 16c0-3 26-3 26 0 0 12-4 18-13 18s-13-6-13-18z" />{bridge}{arms}</svg>
+    case 'wayfarer':
+      return <svg {...common}><path d="M5 13h28l-3 18c-.5 3-21.5 3-22 0z" /><path d="M47 13h28l-3 18c-.5 3-21.5 3-22 0z" />{bridge}{arms}</svg>
     default:
       return null
   }
@@ -154,10 +248,39 @@ const features = [
   { num: '04', title: 'Fits little faces', body: 'Built from the ground up for child proportions. Soft-grip nose pads stay put through every cartwheel, scoot and slide.' },
 ]
 
-const tests = [
-  { ic: 'drop', title: 'The drop test', body: 'Two metres of concrete. Fifty drops in a row. No splinters.' },
-  { ic: 'refresh', title: 'The bend test', body: '10,000 hinge cycles to 180°. Snaps right back, every time.' },
-  { ic: 'splash', title: 'The everything-else test', body: 'Sand. Pool water. Pasta sauce. Backpack bottoms. All survived.' },
+/* Pulled from the old "we test them the way your kid will" data, condensed into a strip */
+const strip = [
+  { ic: 'drop', title: 'Drop-proof', sub: '2 m onto concrete, 50× over' },
+  { ic: 'refresh', title: "Bend, don't break", sub: '10,000 hinge cycles to 180°' },
+  { ic: 'weight', title: 'Feather-light', sub: '12 g of flexible TR-90' },
+  { ic: 'badge', title: '93% break-free', sub: 'survive their first whole year' },
+]
+
+/* Choose your collection — frame ranges by name, each in a wordmark colour */
+const collections = [
+  { name: 'Luna', tag: 'Round & sweet', color: '#E8392B', shape: 'round' },
+  { name: 'Archer', tag: 'Bold & ready', color: '#2D8FD5', shape: 'square' },
+  { name: 'Fable', tag: 'Storybook cool', color: '#8A4FC4', shape: 'oval' },
+  { name: 'Willow', tag: 'Easy breezy', color: '#57B33B', shape: 'rectangle' },
+  { name: 'Scout', tag: 'Little explorer', color: '#E5439A', shape: 'panto' },
+  { name: 'Pixie', tag: 'Bright spark', color: '#F5871F', shape: 'wayfarer' },
+]
+
+/* Kids eye care — friendly, jargon-free help */
+const careCards = [
+  { ic: 'bluelight', color: '#E4F0FB', accent: '#2E83BD', title: 'Blue-light buddies', body: 'Screen-time lenses that keep tired eyes comfy after cartoons and class.' },
+  { ic: 'sunsafe', color: '#FFEFD2', accent: '#B96E00', title: 'Sun-safe lenses', body: 'UV protection built in, because outdoor adventures should be safe ones.' },
+  { ic: 'eyecheck', color: '#E6F6EC', accent: '#3F8B4D', title: 'Check-up reminders', body: "We nudge you when it's time for an eye test. One less thing to remember." },
+]
+
+/* Smiles strip — real-kid photos with playful captions */
+const smiles = [
+  { src: '/assets/photos/portrait-tiny.png', cap: 'Aanya, age 5', sub: 'Luna · Sky' },
+  { src: '/assets/photos/kid-jumping-clean.png', cap: 'Misha, age 6', sub: 'Archer · Cobalt' },
+  { src: '/assets/photos/portrait-mid.png', cap: 'Meher, age 8', sub: 'Fable · Navy' },
+  { src: '/assets/photos/duo-tiny.png', cap: 'Riya & Aarav, age 6', sub: 'Willow · Sky' },
+  { src: '/assets/photos/portrait-teen.png', cap: 'Kabir & Kiara, age 11', sub: 'Scout · Amber' },
+  { src: '/assets/photos/kids-garden.png', cap: 'The Garden Gang', sub: 'Pixie · Forest' },
 ]
 
 const testimonials = [
@@ -272,9 +395,6 @@ function KidsWave({ color = '#FF8C00', flip = false }: { color?: string; flip?: 
 }
 
 export default function Home() {
-  const { theme } = useTheme()
-  const isKids = theme === 'kids'
-
   return (
     <div>
       {/* ============ NAV ============ */}
@@ -284,7 +404,7 @@ export default function Home() {
       <header className="hero">
         <div className="hero-orb-1" aria-hidden />
         <div className="hero-orb-2" aria-hidden />
-        {isKids && <KidsDecor />}
+        <KidsDecor />
         <div className="container hero-grid">
           <div className="hero-copy">
             <h1>
@@ -296,297 +416,224 @@ export default function Home() {
               to wear them.
             </p>
             <div className="hero-ctas">
-              {/* <Link href="/shop" className="btn btn-primary">Shop the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span></Link> */}
               <Link href="/collections" className="btn btn-primary">
                 See the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
               </Link>
-              {/* <Link href="/fit" className="btn btn-ghost">Find your fit</Link> */}
-            </div>
-            <div className="hero-trust">
-              <span className="hero-stars">★★★★★</span>
-              <span><strong>4.9 / 5</strong> family rated</span>
-              <span><strong>Free</strong> shipping across India</span>
+              <Link href="#care" className="btn btn-ghost">
+                <span className="btn-arrow"><Icon name="glasses" size={18} /></span> Take the vision quiz
+              </Link>
             </div>
           </div>
 
-          {isKids ? (
-            <div className="hero-kids-cast">
-              <div className="hkc-grass-band" aria-hidden>
-                <Image src="/images/grass.png" alt="" width={2508} height={627} priority className="hkc-grass-img" />
-                <Image src="/images/grass.png" alt="" width={2508} height={627} priority className="hkc-grass-img hkc-grass-flip" />
-              </div>
-              <Image
-                src="/assets/photos/kid-jumping-cutout.png"
-                alt="Girl mid-jump wearing Foal & Pony glasses"
-                width={955}
-                height={1186}
-                priority
-                className="hkc-kid hkc-girl"
-              />
-              <Image
-                src="/assets/photos/boy-jumping.png"
-                alt="Boy mid-jump wearing Foal & Pony glasses"
-                width={1086}
-                height={1448}
-                priority
-                className="hkc-kid hkc-boy"
-              />
-              <Image
-                src="/images/logo/foal-flip.png"
-                alt=""
-                width={859}
-                height={907}
-                priority
-                className="hkc-mascot hkc-foal"
-              />
-              <Image
-                src="/images/logo/pony-flip.png"
-                alt=""
-                width={895}
-                height={977}
-                priority
-                className="hkc-mascot hkc-pony"
-              />
-            </div>
-          ) : (
-            <div className="hero-visual hero-visual-cutout">
-              <Image
-                src="/assets/photos/kid-jumping-cutout.png"
-                alt="Kid mid-jump wearing Foal & Pony glasses"
-                fill
-                priority
-                className="hero-photo hero-photo-cutout"
-                sizes="(max-width: 1100px) 90vw, 540px"
-              />
-              <Image
-                src="/images/logo/foal-jump.png"
-                alt=""
-                width={240}
-                height={240}
-                className="hero-mascot-float hero-mascot-foal"
-                priority
-              />
-              <Image
-                src="/images/logo/pony.png"
-                alt=""
-                width={260}
-                height={260}
-                className="hero-mascot-float hero-mascot-pony"
-                priority
-              />
-            </div>
-          )}
+          <div className="hero-visual hero-visual-cutout">
+            <Image
+              src="/assets/photos/hero-duo.png"
+              alt="Two kids smiling in Foal & Pony glasses"
+              fill
+              priority
+              className="hero-photo hero-photo-cutout"
+              sizes="(max-width: 1100px) 90vw, 540px"
+            />
+            {/* Jumping foal + pony mascots commented out per request
+            <Image
+              src="/images/logo/foal-jump.png"
+              alt=""
+              width={240}
+              height={240}
+              className="hero-mascot-float hero-mascot-foal"
+              priority
+            />
+            <Image
+              src="/images/logo/pony.png"
+              alt=""
+              width={260}
+              height={260}
+              className="hero-mascot-float hero-mascot-pony"
+              priority
+            />
+            */}
+          </div>
         </div>
       </header>
 
-      {isKids && <KidsWave color="#FFF3DF" />}
-
-      {/* ============ TRUST BAR, Premium only ============ */}
-      {theme === 'premium' && (
-        <section className="trust">
-          <div className="container trust-row">
-            <div className="trust-item">
-              <span className="trust-ic"><Icon name="drop" /></span>
-              <div>
-                <div className="trust-num">2 m</div>
-                <div className="trust-lbl">Drop-tested onto concrete</div>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-ic"><Icon name="refresh" /></span>
-              <div>
-                <div className="trust-num">10,000×</div>
-                <div className="trust-lbl">Hinge bend cycles</div>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-ic"><Icon name="weight" /></span>
-              <div>
-                <div className="trust-num">12 g</div>
-                <div className="trust-lbl">Barely-there weight</div>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-ic"><Icon name="badge" /></span>
-              <div>
-                <div className="trust-num">19</div>
-                <div className="trust-lbl">Models · 100+ colours</div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ============ PLAY BREAK, Kids only (playful hook right under hero) ============ */}
-      {theme === 'kids' && (
-        <section className="section" id="play-cta">
-          <div className="container">
-            <div className="play-card">
-              <div className="play-blob play-blob-1" aria-hidden />
-              <div className="play-blob play-blob-2" aria-hidden />
-              <div className="play-blob play-blob-3" aria-hidden />
-              <div className="play-card-text">
-                <span className="eyebrow">Pssst, over here!</span>
-                <h2>
-                  Glasses on? <em>Game on.</em>
-                </h2>
-                <p>
-                  Take a play break with Brick Breaker, 25 levels of bright, bouncy,
-                  brick-smashing fun. No sign-up. Just play.
-                </p>
-                <div className="hero-ctas">
-                  <Link href="/games" className="btn btn-primary">
-                    Play &amp; win <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
-                  </Link>
+      {/* ============ TRUST STRIP (built from our durability test data) ============ */}
+      <section className="fp-strip-wrap">
+        <div className="container">
+          <div className="fp-strip">
+            {strip.map((s, i) => (
+              <div key={i} className="fp-strip-item">
+                <span className="fp-strip-ic"><Icon name={s.ic} size={26} /></span>
+                <div>
+                  <strong>{s.title}</strong>
+                  <span>{s.sub}</span>
                 </div>
               </div>
-              <div className="play-card-art">
-                <div className="bb-preview" aria-hidden>
-                  <div className="bb-bricks">
-                    <div className="bb-row"><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /></div>
-                    <div className="bb-row"><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /></div>
-                    <div className="bb-row"><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /></div>
-                  </div>
-                  <span className="bb-ball" />
-                  <span className="bb-paddle" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ============ FEATURE SPOTLIGHT, Premium only ============ */}
-      {theme === 'premium' && (
-        <section className="section" id="why">
-          <div className="container">
-            <div className="s-head">
-              <div>
-                <span className="eyebrow">Why parents love us.</span>
-                <h2>
-                  Built different,<br /> because <em>kids are.</em>
-                </h2>
-              </div>
-              <p>
-                We obsessed over every gram, hinge, colour and comfort so you get one thing:
-                frames that keep up, and stay on, all day long.
-              </p>
-            </div>
-            <div className="features-grid">
-              {features.map((f, i) => (
-                <div key={i} className="feat">
-                  <span className="feat-num">{f.num}</span>
-                  <h3>{f.title}</h3>
-                  <p>{f.body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ============ TORTURE TEST ============ */}
-      <section className="torture">
-        <div className="container torture-grid">
-          <div>
-            <span className="eyebrow">Built for real kids.</span>
-            <h2>
-              We test them the way <em>your kid will.</em>
-            </h2>
-            <p className="lede">
-              Every Foal &amp; Pony frame goes through our torture lab. Dropped, bent,
-              frozen, sat on, and re-tested. Before it ever gets near a playground.
-            </p>
-            <div className="test-list">
-              {tests.map((t, i) => (
-                <div key={i} className="test-row">
-                  <span className="test-ic"><Icon name={t.ic} /></span>
-                  <div>
-                    <strong>{t.title}</strong>
-                    <span>{t.body}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="torture-visual-wrapper" style={{ position: 'relative' }}>
-            <div className="torture-visual torture-reel" aria-label="Durability test motion reel">
-              <Image
-                src="/assets/photos/flexible-hinge.png"
-                alt="A close-up demonstration of our flexible, bendable temple arm showing extreme hinge durability"
-                fill
-                sizes="(max-width: 1100px) 90vw, 540px"
-                className="torture-reel-photo"
-              />
-              <div className="reel-scrim" aria-hidden />
-              <div className="reel-frame reel-frame-a">
-                <span>Drop test</span>
-                <strong>50x Concrete</strong>
-              </div>
-              <div className="reel-frame reel-frame-b">
-                <span>Flex test</span>
-                <strong>10k hinge cycles</strong>
-              </div>
-              <div className="reel-frame reel-frame-c">
-                <span>Weight</span>
-                <strong>12g TR-90</strong>
-              </div>
-              <div className="reel-controls" aria-hidden>
-                <span className="reel-play">▶</span>
-                <span className="reel-track"><i style={{ width: '45%' }} /></span>
-                <span className="reel-time">00:08</span>
-              </div>
-            </div>
-            <div className="torture-stamp" style={{ zIndex: 10 }}>
-              <span className="big">93%</span>
-              <span className="sm">survive the first year break-free</span>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ============ FIND YOUR FIT, hidden until launch ============
-      <section className="section fit" id="fit">
-        <div className="container">
-          <div className="fit-card">
-            <div className="fit-text">
-              <span className="eyebrow">Find your fit.</span>
-              <h2>
-                The right size, <em>first time.</em>
-              </h2>
-              <p>
-                No more guesswork. Match your child's age and a couple of measurements
-                to the perfect frame in under a minute, using our visual size guide.
-              </p>
-              <div className="fit-steps">
-                <span className="fit-step"><b>1</b> Pick their age</span>
-                <span className="fit-step"><b>2</b> Measure face width</span>
-                <span className="fit-step"><b>3</b> Match a frame</span>
-              </div>
-              <Link href="/fit" className="btn btn-primary">
-                Open the size guide
-              </Link>
-            </div>
-            <div className="fit-img">
-              <Image
-                src="/assets/photos/scale-12g.png"
-                alt="Foal & Pony ultra-lightweight child frames on a scale showing 12 grams"
-                fill
-                sizes="(max-width: 1100px) 90vw, 540px"
-                style={{ objectFit: 'cover' }}
-              />
-              <div className="fit-chip">
-                <span className="lbl">FRAME WEIGHT</span>
-                <span className="val">12 grams</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/*  The old full "We test them the way your kid will" torture section now lives
+          as the compact strip above. Kept here, commented out, in case we want it back.
+
+      <section className="torture">
+        ...original torture-lab section...
       </section>
       */}
 
+      {/* ============ OUR STORY ============ */}
+      <section className="fp-story section has-decor" id="about">
+        <SectionDecor variant={2} />
+        <div className="container fp-story-grid">
+          <div className="fp-story-img">
+            <Image
+              src="/assets/our-story.png"
+              alt="Foal & Pony, behind the scenes"
+              fill
+              sizes="(max-width: 980px) 90vw, 520px"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
+          <div className="fp-story-text">
+            <span className="eyebrow">our story</span>
+            <h2>Two little ponies, <span className="fp-hl fp-hl-pink">one big idea.</span></h2>
+            <p>
+              We make glasses kids actually want to wear, bright, tough and full of
+              character. Born for real childhoods and built by Stallion Eyewear, so every
+              pair keeps up with the cartwheels, the scoots and the faceplants.
+            </p>
+            <Link href="/collections" className="btn btn-ghost">
+              Meet the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ CHOOSE YOUR COLLECTION ============ */}
+      <section className="fp-collections section has-decor">
+        <SectionDecor variant={0} />
+        <div className="container">
+          <div className="fp-collections-head">
+            <span className="eyebrow">pick a pair, start an adventure</span>
+            <h2>Choose your <span className="fp-hl fp-hl-yellow">collection.</span></h2>
+            <p>Each frame has its own colour and character. Tap one to meet the range.</p>
+          </div>
+          <div className="fp-collections-grid">
+            {collections.map((c) => (
+              <Link key={c.name} href="/collections" className="fp-coll-card">
+                <span className="fp-coll-visual" style={{ ['--c' as string]: c.color }}>
+                  <span className="fp-coll-circle" />
+                  <span className="fp-coll-specs"><Specs shape={c.shape} color={c.color} /></span>
+                </span>
+                <span className="fp-coll-name">{c.name}</span>
+                <span className="fp-coll-tag">{c.tag}</span>
+              </Link>
+            ))}
+          </div>
+          <div className="fp-collections-cta">
+            <Link href="/collections" className="btn btn-ghost">
+              Explore all collections <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ GAMES HOOK ============ */}
+      <section className="section" id="play-cta">
+        <div className="container">
+          <div className="play-card">
+            <div className="play-blob play-blob-1" aria-hidden />
+            <div className="play-blob play-blob-2" aria-hidden />
+            <div className="play-blob play-blob-3" aria-hidden />
+            <div className="play-card-text">
+              <span className="eyebrow">Pssst, over here!</span>
+              <h2>
+                Glasses on? <em>Game on.</em>
+              </h2>
+              <p>
+                Take a play break with Brick Breaker, 25 levels of bright, bouncy,
+                brick-smashing fun. No sign-up. Just play.
+              </p>
+              <div className="hero-ctas">
+                <Link href="/games" className="btn btn-primary">
+                  Play &amp; win <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+                </Link>
+              </div>
+            </div>
+            <div className="play-card-art">
+              <div className="bb-preview" aria-hidden>
+                <div className="bb-bricks">
+                  <div className="bb-row"><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /><i style={{ background: '#FF8C00' }} /></div>
+                  <div className="bb-row"><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /><i style={{ background: '#4CAF50' }} /></div>
+                  <div className="bb-row"><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /><i style={{ background: '#1E88E5' }} /></div>
+                </div>
+                <span className="bb-ball" />
+                <span className="bb-paddle" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ KIDS EYE CARE (vision quiz target) ============ */}
+      <section className="fp-care section has-decor" id="care">
+        <SectionDecor variant={1} />
+        <div className="container">
+          <div className="fp-care-head">
+            <span className="eyebrow">little eyes, big care</span>
+            <h2>Kids eye care, <span className="fp-hl fp-hl-blue">made simple.</span></h2>
+            <p>No jargon. Just friendly help for happy, healthy eyes, and a quick quiz to point you the right way.</p>
+          </div>
+          <div className="fp-care-grid">
+            {careCards.map((c, i) => (
+              <div key={i} className="fp-care-card">
+                <span className="fp-care-ic" style={{ background: c.color, color: c.accent }}>
+                  <Icon name={c.ic} size={24} />
+                </span>
+                <h3>{c.title}</h3>
+                <p>{c.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="fp-care-cta">
+            <a href="https://wa.me/919324337504" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+              Take the vision quiz <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FEATURE SPOTLIGHT ============ */}
+      <section className="section has-decor" id="why">
+        <SectionDecor variant={2} />
+        <div className="container">
+          <div className="s-head">
+            <div>
+              <span className="eyebrow">Why parents love us.</span>
+              <h2>
+                Built different,<br /> because <em>kids are.</em>
+              </h2>
+            </div>
+            <p>
+              We obsessed over every gram, hinge, colour and comfort so you get one thing:
+              frames that keep up, and stay on, all day long.
+            </p>
+          </div>
+          <div className="features-grid">
+            {features.map((f, i) => (
+              <div key={i} className="feat">
+                <span className="feat-num">{f.num}</span>
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============ FEATHERLIGHT, 12 g weight ============ */}
-      <section className="section fit" id="weight">
+      <section className="section fit has-decor" id="weight">
+        <SectionDecor variant={0} />
         <div className="container">
           <div className="fit-card">
             <div className="fit-text">
@@ -620,7 +667,8 @@ export default function Home() {
       </section>
 
       {/* ============ SOCIAL PROOF ============ */}
-      <section className="section proof">
+      <section className="section proof has-decor">
+        <SectionDecor variant={1} />
         <div className="container">
           <div className="s-head">
             <span className="eyebrow">Loved by the toughest critics.</span>
@@ -650,49 +698,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ SCHOOLS / B2B, hidden until launch ============
-      <section className="section" id="schools">
+      {/* ============ SMILES BEHIND EVERY FRAME ============ */}
+      <section className="fp-smiles section has-decor">
+        <SectionDecor variant={0} />
         <div className="container">
-          <div className="schools-card">
-            <div>
-              <span className="eyebrow">For schools and clinics.</span>
-              <h2>
-                Eyewear partnerships <em>that scale.</em>
-              </h2>
-              <p>
-                Equip classrooms, vision programs and paediatric clinics with frames built
-                to survive real childhoods. At volume, with the paperwork handled.
-              </p>
-              <div className="schools-ctas">
-                <Link href="/contact?topic=bulk" className="btn btn-primary">
-                  Bulk orders <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
-                </Link>
-                <Link href="/contact?topic=partner" className="btn btn-outline">
-                  Partner with us
-                </Link>
-              </div>
-            </div>
-            <div className="schools-mini">
-              <div className="schools-mini-row">
-                <strong>Built to outlast budgets</strong>
-                <span>Lower replacement rates and bulk-friendly pricing keep programme costs predictable, year after year.</span>
-              </div>
-              <div className="schools-mini-row">
-                <strong>Standards &amp; compliance</strong>
-                <span>Impact-tested, UV-rated and certified to children&apos;s safety standards. Documentation included.</span>
-              </div>
-              <div className="schools-mini-row">
-                <strong>Customisable &amp; co-branded</strong>
-                <span>Tailored size kits, colour ranges and optional co-branding for your school or clinic.</span>
-              </div>
-            </div>
+          <div className="fp-smiles-head">
+            <span className="eyebrow">real kids, real adventures</span>
+            <h2>Smiles behind <span className="fp-hl fp-hl-pink">every frame.</span></h2>
+          </div>
+          <div className="fp-smiles-track">
+            {smiles.map((s, i) => (
+              <figure key={i} className="fp-smile">
+                <div className="fp-smile-img">
+                  <Image src={s.src} alt={s.cap} fill sizes="(max-width: 720px) 60vw, 240px" style={{ objectFit: 'cover' }} />
+                </div>
+                <figcaption>
+                  <strong>{s.cap}</strong>
+                  <span>{s.sub}</span>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
-      */}
 
-      {/* ============ PARTNER BANNER, shown in both themes ============ */}
-      <section className="section" id="partner-cta">
+      {/* ============ PARTNER BANNER ============ */}
+      <section className="section has-decor" id="partner-cta">
+        <SectionDecor variant={1} />
         <div className="container">
           <div className="schools-card">
             <div>
@@ -726,7 +758,7 @@ export default function Home() {
 
       {/* ============ FINAL CTA ============ */}
       <section className="finale">
-        {isKids && <FinaleDecor />}
+        <FinaleDecor />
         <div className="container">
           <Image
             src="/images/logo/foal-jump.png"
@@ -744,8 +776,6 @@ export default function Home() {
             Free shipping across India and easy returns, no fuss.
           </p>
           <div className="hero-ctas">
-            {/* <Link href="/shop" className="btn btn-primary">Shop the collection</Link> */}
-            {/* <Link href="/fit" className="btn btn-ghost">Find your fit</Link> */}
             <Link href="/collections" className="btn btn-primary">
               See the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
             </Link>
@@ -757,78 +787,7 @@ export default function Home() {
       </section>
 
       {/* ============ FOOTER ============ */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <Image src="/assets/foalandpony_wordmark.png" alt="Foal & Pony" width={180} height={48} />
-              <p>
-                Premium eyewear for little adventurers. Fun, durable, made with love by
-                Stallion Eyewear. Little eyes, big adventures.
-              </p>
-              <div className="footer-social">
-                <a
-                  href="https://www.instagram.com/foalandpony.eyewear?igsh=bmNsdXJxOHU0dDRq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                >
-                  <Icon name="instagram" size={18} />
-                </a>
-                <a href="https://wa.me/919324337504" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                  <Icon name="whatsapp" size={18} />
-                </a>
-                <a href="mailto:hello@foalandpony.com" aria-label="Email">
-                  <Icon name="mail" size={18} />
-                </a>
-              </div>
-            </div>
-            {/* footer Shop column, hidden until launch
-            <div className="footer-col">
-              <h4>Shop</h4>
-              <ul>
-                <li><Link href="/shop">All frames</Link></li>
-                <li><Link href="/shop?shape=round">Round</Link></li>
-                <li><Link href="/shop?shape=square">Square</Link></li>
-                <li><Link href="/shop?shape=oval">Oval</Link></li>
-              </ul>
-            </div>
-            */}
-            <div className="footer-col">
-              <h4>Explore</h4>
-              <ul>
-                <li><Link href="/collections">Collections</Link></li>
-                <li><Link href="/blog">Blog</Link></li>
-                <li><Link href="/games">Games</Link></li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Help</h4>
-              <ul>
-                {/* <li><Link href="/fit">Find your fit</Link></li> */}
-                <li><Link href="/policies/care">Care guide</Link></li>
-                <li><Link href="/policies/shipping">Shipping &amp; returns</Link></li>
-                <li><Link href="/partner">Partner with us</Link></li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Company</h4>
-              <ul>
-                <li><a href="#why">Why Foal &amp; Pony</a></li>
-                <li><Link href="/partner">Partner with us</Link></li>
-                <li><Link href="/about">Our story</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} Foal &amp; Pony. All rights reserved.</span>
-            <span>
-              A brand by <strong>Stallion Eyewear</strong> · BUILT BY{' '}
-              <a href="https://garihc.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--orange-warm)', fontWeight: 700 }}>GARIHC</a>
-            </span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

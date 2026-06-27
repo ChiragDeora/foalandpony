@@ -4,13 +4,16 @@ import { urlFor } from '@/lib/sanity/client'
 import type { FoalProduct } from '@/lib/sanity/types'
 import { formatInr } from '@/lib/util/money'
 
-function primaryImage(product: FoalProduct) {
-  const first = product.colours?.find((c) => c.image)?.image
-  if (first) return urlFor(first).width(640).height(640).fit('crop').url()
-  if (product.lifestyleImages?.[0]) {
-    return urlFor(product.lifestyleImages[0]).width(640).height(640).fit('crop').url()
+function primaryImage(product: FoalProduct): { url: string | null; aspect: number | null } {
+  const colour = product.colours?.find((c) => c.image)
+  if (colour?.image) {
+    return { url: urlFor(colour.image).width(900).url(), aspect: colour.imageAspect ?? null }
   }
-  return null
+  const life = product.lifestyleImages?.[0]
+  if (life) {
+    return { url: urlFor(life).width(900).url(), aspect: life.aspectRatio ?? null }
+  }
+  return { url: null, aspect: null }
 }
 
 export function ProductCard({ product }: { product: FoalProduct }) {
@@ -20,9 +23,12 @@ export function ProductCard({ product }: { product: FoalProduct }) {
   return (
     <article className="product-card">
       <Link href={`/shop/${product.slug}`} className="product-card-link">
-        <div className="product-card-image">
-          {thumb ? (
-            <Image src={thumb} alt={product.name} fill sizes="(max-width: 768px) 100vw, 33vw" />
+        <div
+          className="product-card-image"
+          style={thumb.aspect ? { aspectRatio: String(thumb.aspect) } : undefined}
+        >
+          {thumb.url ? (
+            <Image src={thumb.url} alt={product.name} fill sizes="(max-width: 768px) 100vw, 33vw" />
           ) : (
             <div className="product-card-placeholder">
               <svg viewBox="0 0 80 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">

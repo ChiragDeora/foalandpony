@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { getProductBySlug } from '@/lib/sanity/products'
-import { formatInr } from '@/lib/util/money'
-import { AddToCart } from '@/components/shop/AddToCart'
+// price + add-to-cart hidden until pricing launch
+// import { formatInr } from '@/lib/util/money'
+// import { AddToCart } from '@/components/shop/AddToCart'
 import { ProductGallery } from '@/components/shop/ProductGallery'
 import { ProductColourProvider } from '@/components/shop/ProductColourContext'
 
@@ -24,7 +25,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="shop-page product-detail-wrap">
-      <Link href="/shop" className="shop-link-muted">← All frames</Link>
+      <Link href="/collections" className="shop-link-muted">← All frames</Link>
 
       <div className="product-detail">
         <ProductColourProvider>
@@ -34,7 +35,7 @@ export default async function ProductPage({ params }: Props) {
             <span className="shop-page-kicker">{AGE_LABEL[product.ageBand]}</span>
             <h1>{product.name}</h1>
             {product.tagline && <p className="product-detail-tagline">{product.tagline}</p>}
-            <p className="product-detail-price">{formatInr(product.price)}</p>
+            {/* price hidden until pricing launch */}
 
             {product.sizeCode && (
               <div className="product-detail-size">
@@ -43,7 +44,8 @@ export default async function ProductPage({ params }: Props) {
               </div>
             )}
 
-            <AddToCart product={product} />
+            {/* add-to-cart hidden until pricing launch
+            <AddToCart product={product} /> */}
 
             {product.description && (
               <div className="product-detail-desc">
@@ -62,7 +64,7 @@ export default async function ProductPage({ params }: Props) {
               >
                 Ask on WhatsApp
               </a>
-              <Link href="/fit" className="btn btn-ghost">Find your fit</Link>
+              {/* Find your fit hidden until launch */}
             </div>
           </div>
         </ProductColourProvider>

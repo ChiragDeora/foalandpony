@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import type { FoalProduct } from '@/lib/sanity/types'
 import { ProductCard } from './ProductCard'
 
@@ -15,12 +14,12 @@ export function ProductGrid({ products }: { products: FoalProduct[] }) {
           start on sizing or chat to us about which model suits your kid best.
         </p>
         <div className="shop-empty-ctas">
-          <Link href="/fit" className="btn btn-primary">Find your fit</Link>
+          {/* Find your fit hidden until launch */}
           <a
             href="https://wa.me/919324337504"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-ghost"
+            className="btn btn-primary"
           >
             Ask on WhatsApp
           </a>

@@ -46,7 +46,8 @@ export function ShopAuthActions() {
         <UserButton afterSignOutUrl="/" userProfileMode="modal">
           <UserButton.MenuItems>
             <UserButton.Link label="My account" labelIcon={<BagIcon />} href="/account" />
-            <UserButton.Link label="Find your fit" labelIcon={<GlassesIcon />} href="/fit" />
+            {/* Find your fit hidden until launch
+            <UserButton.Link label="Find your fit" labelIcon={<GlassesIcon />} href="/fit" /> */}
             <UserButton.Action label="manageAccount" />
             <UserButton.Action label="signOut" />
           </UserButton.MenuItems>

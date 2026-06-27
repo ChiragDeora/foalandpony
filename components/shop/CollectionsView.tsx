@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { ProductShape } from '@/lib/sanity/shapes'
+import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 
 export type ShapeGroup = {
   key: ProductShape
@@ -71,35 +72,9 @@ function Icon({ name, size = 22 }: { name: string; size?: number }) {
 }
 
 export function CollectionsView({ groups }: { groups: ShapeGroup[] }) {
-  const [menuOpen, setMenuOpen] = useState(false)
-
   return (
     <div>
-      {/* ============ NAV (same shell as homepage) ============ */}
-      <nav className="nav">
-        <div className="nav-inner">
-          <Link href="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
-            <Image src="/assets/foalandpony_wordmark.png" alt="Foal & Pony" width={160} height={42} priority />
-          </Link>
-          <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
-            <li><Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link></li>
-            <li><Link href="/collections" onClick={() => setMenuOpen(false)}>Collections</Link></li>
-            <li><Link href="/fit" onClick={() => setMenuOpen(false)}>Find your fit</Link></li>
-          </ul>
-          <div className="nav-actions">
-            <Link href="/cart" className="nav-cart" aria-label="Cart">
-              <Icon name="cart" size={20} /> Cart
-            </Link>
-            <button
-              className="nav-burger"
-              onClick={() => setMenuOpen(v => !v)}
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? '✕' : '☰'}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* ============ COLLECTIONS ============ */}
       <section className="section" style={{ background: 'var(--paper)' }}>
@@ -153,66 +128,7 @@ export function CollectionsView({ groups }: { groups: ShapeGroup[] }) {
         </div>
       </section>
 
-      {/* ============ FOOTER ============ */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <Image src="/assets/foalandpony_wordmark.png" alt="Foal & Pony" width={180} height={48} />
-              <p>
-                Premium eyewear for little adventurers. Fun, durable, made with love by
-                Stallion Eyewear. Little eyes, big adventures.
-              </p>
-              <div className="footer-social">
-                <a
-                  href="https://www.instagram.com/foalandpony.eyewear?igsh=bmNsdXJxOHU0dDRq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                >
-                  <Icon name="instagram" size={18} />
-                </a>
-                <a href="https://wa.me/919324337504" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                  <Icon name="whatsapp" size={18} />
-                </a>
-                <a href="mailto:hello@foalandpony.com" aria-label="Email">
-                  <Icon name="mail" size={18} />
-                </a>
-              </div>
-            </div>
-            <div className="footer-col">
-              <h4>Shop</h4>
-              <ul>
-                <li><Link href="/shop">All frames</Link></li>
-                <li><Link href="/shop?shape=round">Round</Link></li>
-                <li><Link href="/shop?shape=square">Square</Link></li>
-                <li><Link href="/shop?shape=oval">Oval</Link></li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Help</h4>
-              <ul>
-                <li><Link href="/fit">Find your fit</Link></li>
-                <li><Link href="/policies/care">Care guide</Link></li>
-                <li><Link href="/policies/shipping">Shipping &amp; returns</Link></li>
-                <li><Link href="/contact">Contact us</Link></li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Company</h4>
-              <ul>
-                <li><Link href="/collections">Collections</Link></li>
-                <li><Link href="/about">Our story</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} Foal &amp; Pony. All rights reserved.</span>
-            <span>A brand by <strong>Stallion Eyewear</strong> · BUILT BY GARIHC</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
