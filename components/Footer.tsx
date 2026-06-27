@@ -94,8 +94,8 @@ export function Footer() {
             <h4>Company</h4>
             <ul>
               <li><Link href="/partner">Partner with us</Link></li>
-              <li><a href="/#why">Why Foal &amp; Pony</a></li>
-              <li><a href="/#about">Our story</a></li>
+              <li><Link href="/#why">Why Foal &amp; Pony</Link></li>
+              <li><Link href="/#about">Our story</Link></li>
             </ul>
           </div>
         </div>
