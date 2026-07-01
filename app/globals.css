@@ -3133,7 +3133,7 @@ img { display: block; max-width: 100%; }
 [data-theme='kids'] .hero-grid { grid-template-columns: 1fr 1.28fr; gap: 28px; align-items: center; }
 /* Square frame so the kids fill it without dead space on top */
 [data-theme='kids'] .hero-visual-cutout { aspect-ratio: 1 / 1; }
-/* Feather the hero bottom into the page — the orbs/decor fade into cream
+/* Feather the hero bottom into the page - the orbs/decor fade into cream
    instead of being clipped in a hard horizontal line. Content (z-index 2)
    stays above this, so the kids photo is untouched. */
 [data-theme='kids'] .hero::after {
@@ -3352,7 +3352,7 @@ img { display: block; max-width: 100%; }
   background: rgba(255,255,255,.55);
   filter: blur(2px);
 }
-/* Specs (glasses) — hidden until hover */
+/* Specs (glasses) - hidden until hover */
 .fp-coll-specs {
   position: absolute;
   inset: 0;
@@ -3456,11 +3456,11 @@ img { display: block; max-width: 100%; }
 .has-decor { position: relative; overflow: hidden; }
 .has-decor > .container { position: relative; z-index: 1; }
 .section-decor { z-index: 0; }
-/* Premium theme keeps things calm — decor only shows in kids (which is our default) */
+/* Premium theme keeps things calm - decor only shows in kids (which is our default) */
 [data-theme='premium'] .section-decor { display: none !important; }
 /* ============ TABLET / MOBILE HARDENING ============ */
 @media (max-width: 768px) {
-  /* No floaty decorations on phones / tablet-portrait — they clutter the narrow
+  /* No floaty decorations on phones / tablet-portrait - they clutter the narrow
      layout and land on the text. The soft orange + blue orbs stay as the playful
      backdrop, so the hero is clean but still on-brand. */
   [data-theme='kids'] .kids-decor { display: none; }

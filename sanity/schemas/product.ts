@@ -46,7 +46,7 @@ export const productSchema = defineType({
     defineField({
       name: 'description',
       title: 'Description',
-      description: '3–4 sentences in parent voice. Lead with child benefit.',
+      description: '3-4 sentences in parent voice. Lead with child benefit.',
       type: 'array',
       group: 'basics',
       of: [{ type: 'block', styles: [{ title: 'Normal', value: 'normal' }] }],

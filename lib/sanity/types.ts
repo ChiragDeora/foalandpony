@@ -38,3 +38,42 @@ export type FoalProduct = {
   colours?: ProductColour[]
   lifestyleImages?: LifestyleImage[]
 }
+
+// --- Homepage (singleton) --------------------------------------------------
+export type SmileItem = {
+  url: string | null
+  caption?: string | null
+  subcaption?: string | null
+}
+
+export type Homepage = {
+  heroImageUrl?: string | null
+  heroImageAlt?: string | null
+  ourStoryImageUrl?: string | null
+  ourStoryImageAlt?: string | null
+  weightImageUrl?: string | null
+  weightImageAlt?: string | null
+  smiles?: SmileItem[] | null
+}
+
+// --- Blog ------------------------------------------------------------------
+export type BlogCategory = 'durability' | 'kid-tested' | 'parent-tips'
+
+export type BlogPostSummary = {
+  _id: string
+  title: string
+  slug: string
+  category: BlogCategory
+  excerpt?: string
+  readTime?: string
+  publishedDate?: string
+  featured?: boolean
+  coverImageUrl?: string | null
+}
+
+export type BlogPost = BlogPostSummary & {
+  metaTitle?: string
+  metaDescription?: string
+  coverImageAlt?: string
+  body?: PortableTextBlock[]
+}

@@ -3,7 +3,7 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
-import { DocumentsIcon, DropIcon, TagIcon } from '@sanity/icons'
+import { DocumentsIcon, DropIcon, TagIcon, HomeIcon, EditIcon } from '@sanity/icons'
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schemaTypes } from './sanity/schemas'
 import { BulkImportTool } from './sanity/tools/BulkImportTool'
@@ -16,12 +16,37 @@ export default defineConfig({
   dataset,
   title: 'Foal & Pony',
   schema: { types: schemaTypes },
+  // The Homepage is a singleton - keep it out of the global "create new" menu so
+  // no one can make a second one. It's edited via the Homepage item in the sidebar.
+  document: {
+    newDocumentOptions: (prev) =>
+      prev.filter((item) => item.templateId !== 'homepage'),
+  },
   plugins: [
     structureTool({
       structure: (S) =>
         S.list()
-          .title('Catalogue')
+          .title('Foal & Pony')
           .items([
+            S.listItem()
+              .title('Homepage')
+              .icon(HomeIcon)
+              .child(
+                S.document()
+                  .title('Homepage')
+                  .schemaType('homepage')
+                  .documentId('homepage')
+              ),
+            S.divider(),
+            S.listItem()
+              .title('Blog posts')
+              .icon(EditIcon)
+              .child(
+                S.documentTypeList('blogPost')
+                  .title('Blog posts')
+                  .defaultOrdering([{ field: 'publishedDate', direction: 'desc' }])
+              ),
+            S.divider(),
             S.listItem()
               .title('All products')
               .child(S.documentTypeList('product').title('All products')),
@@ -44,18 +69,18 @@ export default defineConfig({
               ),
             S.divider(),
             S.listItem()
-              .title('Ages 4 – 7')
+              .title('Ages 4 - 7')
               .child(
                 S.documentList()
-                  .title('Ages 4 – 7')
+                  .title('Ages 4 - 7')
                   .filter('_type == "product" && ageBand == "4-7"')
                   .defaultOrdering([{ field: 'order', direction: 'asc' }])
               ),
             S.listItem()
-              .title('Ages 8 – 12')
+              .title('Ages 8 - 12')
               .child(
                 S.documentList()
-                  .title('Ages 8 – 12')
+                  .title('Ages 8 - 12')
                   .filter('_type == "product" && ageBand == "8-12"')
                   .defaultOrdering([{ field: 'order', direction: 'asc' }])
               ),

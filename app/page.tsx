@@ -1,10 +1,10 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { SectionDecor } from '@/components/Decor'
+import { getHomepage } from '@/lib/sanity/homepage'
+import { isSanityImage } from '@/lib/image'
 
 
 /* Inline icon set, quirky outline strokes, drawn here so we don't ship a UI lib */
@@ -253,10 +253,10 @@ const strip = [
   { ic: 'drop', title: 'Drop-proof', sub: '2 m onto concrete, 50× over' },
   { ic: 'refresh', title: "Bend, don't break", sub: '10,000 hinge cycles to 180°' },
   { ic: 'weight', title: 'Feather-light', sub: '12 g of flexible TR-90' },
-  { ic: 'badge', title: '93% break-free', sub: 'survive their first whole year' },
+  { ic: 'badge', title: 'Built to outlast', sub: 'one frame, one school year, probably more' },
 ]
 
-/* Choose your collection — frame ranges by name, each in a wordmark colour */
+/* Choose your collection - frame ranges by name, each in a wordmark colour */
 const collections = [
   { name: 'Luna', tag: 'Round & sweet', color: '#E8392B', shape: 'round' },
   { name: 'Archer', tag: 'Bold & ready', color: '#2D8FD5', shape: 'square' },
@@ -266,15 +266,16 @@ const collections = [
   { name: 'Pixie', tag: 'Bright spark', color: '#F5871F', shape: 'wayfarer' },
 ]
 
-/* Kids eye care — friendly, jargon-free help */
+/* Kids eye care - friendly, jargon-free help */
 const careCards = [
-  { ic: 'bluelight', color: '#E4F0FB', accent: '#2E83BD', title: 'Blue-light buddies', body: 'Screen-time lenses that keep tired eyes comfy after cartoons and class.' },
-  { ic: 'sunsafe', color: '#FFEFD2', accent: '#B96E00', title: 'Sun-safe lenses', body: 'UV protection built in, because outdoor adventures should be safe ones.' },
-  { ic: 'eyecheck', color: '#E6F6EC', accent: '#3F8B4D', title: 'Check-up reminders', body: "We nudge you when it's time for an eye test. One less thing to remember." },
+  { ic: 'smile', color: '#E6F6EC', accent: '#3F8B4D', title: 'Built for small faces', body: 'Soft-grip nose pads and narrower frames, sized for kids from age 3 up - not shrunk down from adult styles.' },
+  { ic: 'shield', color: '#E4F0FB', accent: '#2E83BD', title: 'Built to standard', body: 'Impact-tested and certified to children’s safety standards - not just tough by design, tough by testing.' },
+  { ic: 'hinge', color: '#FFEFD2', accent: '#B96E00', title: 'Bends, doesn’t break', body: 'Hinges flex past 90° and spring back - no snapped arms, no emergency replacements.' },
 ]
 
-/* Smiles strip — real-kid photos with playful captions */
-const smiles = [
+/* Smiles strip - real-kid photos with playful captions.
+   Used as the fallback when the CMS "Smiles gallery" is empty. */
+const SMILES_FALLBACK = [
   { src: '/assets/photos/portrait-tiny.png', cap: 'Aanya, age 5', sub: 'Luna · Sky' },
   { src: '/assets/photos/kid-jumping-clean.png', cap: 'Misha, age 6', sub: 'Archer · Cobalt' },
   { src: '/assets/photos/portrait-mid.png', cap: 'Meher, age 8', sub: 'Fable · Navy' },
@@ -283,21 +284,24 @@ const smiles = [
   { src: '/assets/photos/kids-garden.png', cap: 'The Garden Gang', sub: 'Pixie · Forest' },
 ]
 
+/* Illustrative sample quotes - NOT verified customer reviews. The visible
+   "Illustrative examples…" label in the section must stay. Replace this whole
+   set once 5-10 real reviews exist; do not mix real and sample reviews. */
 const testimonials = [
   {
-    body: 'Third pair of glasses in a year, until these. Six months of football and they still look new. We are genuinely shocked.',
-    name: 'Priya M.',
-    meta: 'Mum of two, ages 7 and 9',
+    body: 'Six months in and still no snapped hinges - that was the deciding factor for us.',
+    name: 'Early feedback',
+    meta: 'mum of two',
   },
   {
-    body: 'He picked the orange ones himself and now he won\'t take them off. That is the real magic. He wants to wear them.',
-    name: 'Daniel R.',
-    meta: 'Dad, son age 5',
+    body: "He picked his own pair and hasn't tried to take them off since.",
+    name: 'Early feedback',
+    meta: 'dad of one',
   },
   {
-    body: 'They look like proper designer frames but shrug off everything my daughter does to them. Worth every rupee.',
-    name: 'Aisha K.',
-    meta: 'Mum, daughter age 8',
+    body: 'Look properly designer, survive properly rough handling.',
+    name: 'Early feedback',
+    meta: 'mum of one',
   },
 ]
 
@@ -394,7 +398,29 @@ function KidsWave({ color = '#FF8C00', flip = false }: { color?: string; flip?: 
   )
 }
 
-export default function Home() {
+export default async function Home() {
+  // Images the company manages in the Studio "Homepage" section. Each falls
+  // back to the photo shipped in /public when the CMS field is left empty.
+  const homepage = await getHomepage()
+
+  const heroImage = homepage?.heroImageUrl || '/assets/photos/hero-duo.png'
+  const heroImageAlt = homepage?.heroImageAlt || 'Two kids smiling in Foal & Pony glasses'
+  const ourStoryImage = homepage?.ourStoryImageUrl || '/assets/our-story.png'
+  const ourStoryImageAlt = homepage?.ourStoryImageAlt || 'Foal & Pony, behind the scenes'
+  const weightImage = homepage?.weightImageUrl || '/assets/photos/scale-12g.png'
+  const weightImageAlt =
+    homepage?.weightImageAlt ||
+    'Foal & Pony ultra-light child frames on a scale showing 12 grams'
+
+  const cmsSmiles = (homepage?.smiles ?? []).filter((s) => s.url)
+  const smiles = cmsSmiles.length
+    ? cmsSmiles.map((s) => ({
+        src: s.url as string,
+        cap: s.caption ?? '',
+        sub: s.subcaption ?? '',
+      }))
+    : SMILES_FALLBACK
+
   return (
     <div>
       {/* ============ NAV ============ */}
@@ -411,15 +437,15 @@ export default function Home() {
               Glasses that <span className="squiggle">survive</span> being a kid.
             </h1>
             <p className="lede">
-              Premium children&apos;s eyewear from Stallion. Built to bend through playgrounds,
-              soccer goals and the occasional faceplant. Comfortable enough they actually want
-              to wear them.
+              Bends through playgrounds, soccer goals, and the occasional faceplant -
+              virtually unbreakable kids eyewear, light enough that kids forget
+              they&apos;re wearing it.
             </p>
             <div className="hero-ctas">
               <Link href="/collections" className="btn btn-primary">
                 See the collection <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
               </Link>
-              <Link href="#care" className="btn btn-ghost">
+              <Link href="/vision-quiz" className="btn btn-ghost">
                 <span className="btn-arrow"><Icon name="glasses" size={18} /></span> Take the vision quiz
               </Link>
             </div>
@@ -427,10 +453,11 @@ export default function Home() {
 
           <div className="hero-visual hero-visual-cutout">
             <Image
-              src="/assets/photos/hero-duo.png"
-              alt="Two kids smiling in Foal & Pony glasses"
+              src={heroImage}
+              alt={heroImageAlt}
               fill
               priority
+              unoptimized={isSanityImage(heroImage)}
               className="hero-photo hero-photo-cutout"
               sizes="(max-width: 1100px) 90vw, 540px"
             />
@@ -487,9 +514,10 @@ export default function Home() {
         <div className="container fp-story-grid">
           <div className="fp-story-img">
             <Image
-              src="/assets/our-story.png"
-              alt="Foal & Pony, behind the scenes"
+              src={ourStoryImage}
+              alt={ourStoryImageAlt}
               fill
+              unoptimized={isSanityImage(ourStoryImage)}
               sizes="(max-width: 980px) 90vw, 520px"
               style={{ objectFit: 'cover' }}
             />
@@ -516,7 +544,7 @@ export default function Home() {
           <div className="fp-collections-head">
             <span className="eyebrow">pick a pair, start an adventure</span>
             <h2>Choose your <span className="fp-hl fp-hl-yellow">collection.</span></h2>
-            <p>Each frame has its own colour and character. Tap one to meet the range.</p>
+            <p>Each collection has its own colour and character - including virtually unbreakable transparent frames for a clean, low-key look. Tap one to meet the range.</p>
           </div>
           <div className="fp-collections-grid">
             {collections.map((c) => (
@@ -582,7 +610,7 @@ export default function Home() {
           <div className="fp-care-head">
             <span className="eyebrow">little eyes, big care</span>
             <h2>Kids eye care, <span className="fp-hl fp-hl-blue">made simple.</span></h2>
-            <p>No jargon. Just friendly help for happy, healthy eyes, and a quick quiz to point you the right way.</p>
+            <p>No jargon. Just friendly help finding the right kids eyewear frames, including sports eyewear for active kids - plus a quick screening game to check if it&apos;s time for an eye test.</p>
           </div>
           <div className="fp-care-grid">
             {careCards.map((c, i) => (
@@ -596,9 +624,9 @@ export default function Home() {
             ))}
           </div>
           <div className="fp-care-cta">
-            <a href="https://wa.me/919324337504" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            <Link href="/vision-quiz" className="btn btn-primary">
               Take the vision quiz <span className="btn-arrow"><Icon name="arrow" size={18} /></span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -651,9 +679,10 @@ export default function Home() {
             </div>
             <div className="fit-img">
               <Image
-                src="/assets/photos/scale-12g.png"
-                alt="Foal & Pony ultra-light child frames on a scale showing 12 grams"
+                src={weightImage}
+                alt={weightImageAlt}
                 fill
+                unoptimized={isSanityImage(weightImage)}
                 sizes="(max-width: 1100px) 90vw, 540px"
                 style={{ objectFit: 'cover' }}
               />
@@ -671,14 +700,29 @@ export default function Home() {
         <SectionDecor variant={1} />
         <div className="container">
           <div className="s-head">
-            <span className="eyebrow">Loved by the toughest critics.</span>
+            <span className="eyebrow">The kind of thing we love to hear.</span>
             <h2>
-              Parent reviewed. <em>Kid-tested.</em>
+              Made for the <em>toughest critics.</em>
             </h2>
             <p>
-              Real reviews from families across India. Glasses survive school, sport,
-              cousin weddings and everything else childhood throws at them.
+              A few early notes on how the frames hold up to school, sport and
+              everything else childhood throws at them.
             </p>
+            <span
+              style={{
+                display: 'inline-block',
+                marginTop: 14,
+                padding: '6px 14px',
+                borderRadius: 999,
+                background: 'rgba(26,43,74,0.06)',
+                color: '#5A6B84',
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: 'var(--fp-body-font)',
+              }}
+            >
+              Illustrative examples while we collect real customer reviews.
+            </span>
           </div>
           <div className="testi-grid">
             {testimonials.map((t, i) => (
@@ -710,7 +754,7 @@ export default function Home() {
             {smiles.map((s, i) => (
               <figure key={i} className="fp-smile">
                 <div className="fp-smile-img">
-                  <Image src={s.src} alt={s.cap} fill sizes="(max-width: 720px) 60vw, 240px" style={{ objectFit: 'cover' }} />
+                  <Image src={s.src} alt={s.cap} fill unoptimized={isSanityImage(s.src)} sizes="(max-width: 720px) 60vw, 240px" style={{ objectFit: 'cover' }} />
                 </div>
                 <figcaption>
                   <strong>{s.cap}</strong>

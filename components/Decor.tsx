@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 
-/* Shared kids decorations — balloons, stars, sparkles, confetti.
+/* Shared kids decorations - balloons, stars, sparkles, confetti.
    Reuses the existing .kids-decor / .kd-* animation classes from globals.css.
    Drop <SectionDecor /> as the first child of a section that has the
    `has-decor` class so it sits behind the content. */

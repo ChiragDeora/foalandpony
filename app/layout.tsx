@@ -7,8 +7,9 @@ import './globals.css'
 import './store.css'
 
 export const metadata: Metadata = {
-  title: 'Foal & Pony - Premium Kids Eyewear',
-  description: 'Fun, flexible, and virtually unbreakable frames designed specifically for children. Because every adventure deserves clear vision.',
+  title: 'Foal & Pony | Kids Eyewear Online India - Branded Kids Eyewear Collections',
+  description:
+    "Shop kids eyewear frames online in India - virtually unbreakable, lightweight, built for real childhoods. Explore Foal & Pony's branded kids eyewear collections.",
   icons: {
     icon: [
       { url: '/favicon.ico' },
